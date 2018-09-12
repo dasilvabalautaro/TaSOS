@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "824916014531",
+    "firebase_url": "https://webrtchermes.firebaseio.com",
+    "project_id": "webrtchermes",
+    "storage_bucket": "webrtchermes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824916014531:android:60d8c56df6cd07b6",
+        "android_client_info": {
+          "package_name": "com.globalhiddenodds.ceres"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824916014531-b124qpebeovnrp9oeofe26sc31jm5kn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFyIKWloR8tHfj9JsU_Ch8Vf44L6JKRyk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824916014531:android:a2c2897a4e466d82",
+        "android_client_info": {
+          "package_name": "com.globalhiddenodds.tasos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824916014531-n0n9bssiv4igbgjg167n0bj52160b1at.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.globalhiddenodds.tasos",
+            "certificate_hash": "236ffd8edde3365422b843747d35a892ba3224b6"
+          }
+        },
+        {
+          "client_id": "824916014531-b124qpebeovnrp9oeofe26sc31jm5kn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFyIKWloR8tHfj9JsU_Ch8Vf44L6JKRyk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824916014531-b124qpebeovnrp9oeofe26sc31jm5kn8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
