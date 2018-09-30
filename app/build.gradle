@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     def config = rootProject.extensions.getByName("ext")
     compileSdkVersion config["compile_sdk"]
-    buildToolsVersion config["build_tools"]
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId config["application_id"]
@@ -69,6 +69,7 @@ dependencies {
     implementation applicationDependencies.okhttpLoggingInterceptor
     implementation applicationDependencies.firebaseCore
     implementation applicationDependencies.firebaseAuth
+    implementation applicationDependencies.firebaseDatabase
     implementation applicationDependencies.rxjava
     implementation applicationDependencies.rxandroid
 

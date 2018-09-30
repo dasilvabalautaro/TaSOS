@@ -2,6 +2,7 @@
 <android.support.design.widget.AppBarLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +13,28 @@
       style="@style/BaseToolbarStyle"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
-      app:layout_scrollFlags="scroll|enterAlways" />
+      app:layout_scrollFlags="scroll|enterAlways"
+      android:elevation="3dp"
+      app:contentInsetEnd="0dp"
+      app:contentInsetLeft="0dp"
+      app:contentInsetRight="0dp"
+      app:contentInsetStart="0dp"
+      app:contentInsetStartWithNavigation="0dp">
+
+
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/lbl_search"
+        android:imeOptions="actionSearch"
+        android:layout_marginStart="5dp"
+        android:inputType="text"
+        android:textColor="@android:color/white"
+        android:padding="8dp"
+        tools:ignore="Autofill" />
+
+  </android.support.v7.widget.Toolbar>
 
   <android.support.constraint.ConstraintLayout
       android:id="@+id/progress"

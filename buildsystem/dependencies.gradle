@@ -36,6 +36,7 @@ ext {
 
     //Firebase
     firebase_version = '16.0.3'
+    firebase_database_version = '16.0.2'
 
     mainApplication = [
             kotlin:                     "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -58,6 +59,7 @@ ext {
             okhttpLoggingInterceptor:   "com.squareup.okhttp3:logging-interceptor:$okhttp_logging_interceptor_version",
             firebaseCore:               "com.google.firebase:firebase-core:$firebase_version",
             firebaseAuth:               "com.google.firebase:firebase-auth:$firebase_version",
+            firebaseDatabase:           "com.google.firebase:firebase-database:$firebase_database_version",
             rxjava:                     "io.reactivex.rxjava2:rxjava:$reactive_version",
             rxandroid:                  "io.reactivex.rxjava2:rxandroid:$reactive_version",
     ]

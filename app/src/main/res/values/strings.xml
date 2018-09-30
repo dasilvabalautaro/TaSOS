@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">TaSOS</string>
+    <string name="error_user_create">Create user failed</string>
+    <string name="error_user_not_found">User not found</string>
+    <string name="lbl_description_image">Image</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="lbl_sing_up">Sign Up</string>
+    <string name="lbl_sing_in">Already have an account?</string>
+    <string name="btn_sign_in">Sign In</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="failure_network_connection">No Network Connection.</string>
+    <string name="failure_server_error">Server Error</string>
+    <string name="failure_input">Input Error</string>
+    <string name="lbl_search">Search Contact</string>
+    <string name="msg_search_process">Search in process</string>
+    <string name="lbl_configuration">Configuration</string>
 </resources>
