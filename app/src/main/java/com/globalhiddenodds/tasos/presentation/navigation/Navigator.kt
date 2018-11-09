@@ -1,8 +1,9 @@
 package com.globalhiddenodds.tasos.presentation.navigation
 
 import android.content.Context
+import android.view.View
 import com.globalhiddenodds.tasos.models.data.User
-import com.globalhiddenodds.tasos.models.interfaces.RepositoryNetwork
+import com.globalhiddenodds.tasos.models.persistent.network.interfaces.RepositoryNetwork
 import com.globalhiddenodds.tasos.presentation.view.activities.LoginActivity
 import com.globalhiddenodds.tasos.presentation.view.activities.ContactActivity
 import javax.inject.Inject
@@ -23,5 +24,5 @@ class Navigator @Inject constructor(private val repositoryNetwork: RepositoryNet
         }
     }
 
-
+    class Extras(val transitionSharedElement: View)
 }

@@ -21,6 +21,7 @@ import com.globalhiddenodds.tasos.extension.viewContainer
 import kotlinx.android.synthetic.main.toolbar.*
 import com.globalhiddenodds.tasos.R.color
 import com.globalhiddenodds.tasos.models.exception.Failure
+import io.reactivex.disposables.CompositeDisposable
 
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ abstract class BaseFragment: Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
+    internal var disposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View =

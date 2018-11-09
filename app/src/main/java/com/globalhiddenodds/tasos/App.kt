@@ -7,6 +7,7 @@ import com.globalhiddenodds.tasos.di.DaggerApplicationComponent
 import com.squareup.leakcanary.LeakCanary
 
 class App: Application() {
+
     val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {
         DaggerApplicationComponent
                 .builder()

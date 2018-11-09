@@ -3,7 +3,7 @@ package com.globalhiddenodds.tasos.domain.interactor
 import com.globalhiddenodds.tasos.domain.functional.Either
 import com.globalhiddenodds.tasos.models.data.User
 import com.globalhiddenodds.tasos.models.exception.Failure
-import com.globalhiddenodds.tasos.models.interfaces.RepositoryNetwork
+import com.globalhiddenodds.tasos.models.persistent.network.interfaces.RepositoryNetwork
 import javax.inject.Inject
 
 

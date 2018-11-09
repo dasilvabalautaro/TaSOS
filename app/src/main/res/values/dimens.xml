@@ -2,4 +2,6 @@
 <resources>
     <dimen name="padding_left">20dp</dimen>
     <dimen name="padding_right">10dp</dimen>
+    <dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
 </resources>

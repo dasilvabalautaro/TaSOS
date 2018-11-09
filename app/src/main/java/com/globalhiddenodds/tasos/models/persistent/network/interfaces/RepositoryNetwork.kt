@@ -1,14 +1,12 @@
-package com.globalhiddenodds.tasos.models.interfaces
+package com.globalhiddenodds.tasos.models.persistent.network.interfaces
 
 import com.globalhiddenodds.tasos.domain.functional.Either
 import com.globalhiddenodds.tasos.models.data.User
 import com.globalhiddenodds.tasos.models.exception.Failure
-import com.globalhiddenodds.tasos.tools.Constants
 import com.globalhiddenodds.tasos.tools.NetworkHandler
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.experimental.delay
 import javax.inject.Inject
 
 

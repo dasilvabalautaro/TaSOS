@@ -43,7 +43,12 @@ class ContactActivity: BaseActivity() {
         }
         if (id == R.id.action_search){
             if (!this.et_search.text.toString().isEmpty()){
-                fragment().searchContact(this.et_search.text.toString())
+
+                supportFragmentManager.fragments.iterator().forEach { fr ->
+                    (fr as? ContactFragment)?.searchContact(this
+                            .et_search.text.toString())
+                }
+
             }
 
         }

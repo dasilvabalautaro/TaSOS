@@ -1,19 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.globalhiddenodds.tasos">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".App"
         android:theme="@style/AppTheme"
-        android:fullBackupContent="@xml/backup_descriptor"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.view.activities.MainActivity"
+        <activity
+            android:name=".presentation.view.activities.MainActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.Translucent">
             <intent-filter>
@@ -21,9 +24,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".presentation.view.activities.LoginActivity" />
         <activity android:name=".presentation.view.activities.ContactActivity" />
+
+        <service
+            android:name=".models.persistent.network.services.HearMessageService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="true"/>
+
     </application>
+
 </manifest>

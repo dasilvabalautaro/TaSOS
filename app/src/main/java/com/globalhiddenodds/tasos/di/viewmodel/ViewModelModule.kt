@@ -2,9 +2,7 @@ package com.globalhiddenodds.tasos.di.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.globalhiddenodds.tasos.presentation.presenter.CreateUserDBViewModel
-import com.globalhiddenodds.tasos.presentation.presenter.CreateUserViewModel
-import com.globalhiddenodds.tasos.presentation.presenter.SearchContactViewModel
+import com.globalhiddenodds.tasos.presentation.presenter.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -33,4 +31,18 @@ abstract class ViewModelModule {
     @ViewModelKey(SearchContactViewModel::class)
     abstract fun bindsSearchContactViewModel(searchContactViewModel:
                                                 SearchContactViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SendMessageViewModel::class)
+    abstract fun bindsSendMessageViewModel(sendMessageViewModel:
+                                                 SendMessageViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GetContactsViewModel::class)
+    abstract fun bindsGetContactsViewModel(getContactsViewModel:
+                                               GetContactsViewModel): ViewModel
+
+
 }

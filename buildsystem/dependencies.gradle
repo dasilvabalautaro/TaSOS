@@ -12,6 +12,7 @@ ext {
     archComponents_version = '1.1.1'
     glide_version = '4.0.0'
     reactive_version = '2.1.0'
+    room_version = '1.0.0'
 
     //Third party libraries
     kotlin_coroutines_version = '0.22.1'
@@ -20,6 +21,7 @@ ext {
     javaxInject_version = '1'
     retrofit_version = '2.3.0'
     okhttp_logging_interceptor_version = '3.8.1'
+    ext.anko_version='0.10.7'
 
     //Unit Testing
     robolectric_version = '3.8'
@@ -62,6 +64,9 @@ ext {
             firebaseDatabase:           "com.google.firebase:firebase-database:$firebase_database_version",
             rxjava:                     "io.reactivex.rxjava2:rxjava:$reactive_version",
             rxandroid:                  "io.reactivex.rxjava2:rxandroid:$reactive_version",
+            anko:                       "org.jetbrains.anko:anko:$anko_version",
+            room:                       "android.arch.persistence.room:runtime:$room_version",
+            roomCompiler:               "android.arch.persistence.room:compiler:$room_version",
     ]
 
     unitTesting = [

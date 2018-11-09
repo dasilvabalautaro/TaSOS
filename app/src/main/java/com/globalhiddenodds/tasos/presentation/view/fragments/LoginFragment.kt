@@ -7,6 +7,8 @@ import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
+import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository
+import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository.set
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.CreateUserDBViewModel
@@ -65,6 +67,9 @@ class LoginFragment: BaseFragment() {
 
     private fun resultCreateUserDb(value: Boolean?){
         if (value != null && value){
+            val prefs = PreferenceRepository.customPrefs(activity!!,
+                    Constants.preference_tasos)
+            prefs[Constants.userId] = Constants.user.id
             navigator.showContact(activity!!)
         }
 
