@@ -5,6 +5,7 @@
     <string name="lbl_description_image">Image</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_message">Place Message</string>
     <string name="lbl_sing_up">Sign Up</string>
     <string name="lbl_sing_in">Already have an account?</string>
     <string name="btn_sign_in">Sign In</string>

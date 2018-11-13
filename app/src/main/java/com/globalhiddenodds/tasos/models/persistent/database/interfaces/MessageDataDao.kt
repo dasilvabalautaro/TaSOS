@@ -13,14 +13,14 @@ interface MessageDataDao {
     @Query("SELECT * FROM messageData")
     fun getAll(): List<MessageData>
 
-    @Query("SELECT source, SUM(source) AS quantity FROM messageData WHERE state == 1 GROUP BY source ORDER BY dateMessage")
+    @Query("SELECT source, COUNT(source) AS quantity FROM messageData WHERE state == 1 GROUP BY source ORDER BY dateMessage")
     fun getNewMessage(): List<SSetNewMessageQuantity>
 
-    @Query("SELECT source FROM messageData GROUP BY source ORDER BY dateMessage")
-    fun getContacts(): LiveData<List<SSetContacts>>
+    @Query("SELECT source FROM messageData  WHERE state == 0 GROUP BY source ORDER BY dateMessage")
+    fun getContacts(): List<SSetContacts>
 
-    @Query("SELECT message, dateMessage FROM messageData WHERE source LIKE :source ORDER BY dateMessage")
-    fun getMessageOfContact(source: String): LiveData<List<SSetMessages>>
+    @Query("SELECT * FROM messageData WHERE source LIKE :source ORDER BY dateMessage")
+    fun getMessageOfContact(source: String): List<MessageData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(messageData: MessageData)

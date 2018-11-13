@@ -44,5 +44,17 @@ abstract class ViewModelModule {
     abstract fun bindsGetContactsViewModel(getContactsViewModel:
                                                GetContactsViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(GetNewMessageViewModel::class)
+    abstract fun bindsGetNewMessageViewModel(getNewMessageViewModel:
+                                                 GetNewMessageViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GetMessageContactViewModel::class)
+    abstract fun bindsGetMessageContactViewModel(getMessageContactViewModel:
+                                                     GetMessageContactViewModel): ViewModel
+
 
 }

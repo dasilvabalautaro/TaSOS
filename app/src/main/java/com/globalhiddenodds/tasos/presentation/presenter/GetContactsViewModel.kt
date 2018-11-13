@@ -20,8 +20,8 @@ class GetContactsViewModel @Inject constructor(private val getContactsUseCase:
         it.either(::handleFailure, ::handleListContacts)
     }
 
-    private fun handleListContacts(contacts: LiveData<List<SSetContacts>>){
-        this.result.value = contacts.value!!.map { GroupMessageView(it.source,
+    private fun handleListContacts(contacts: List<SSetContacts>){
+        this.result.value = contacts.map { GroupMessageView(it.source,
                 0, 0) }
 
        /* contacts.observe(this, Observer { it ->

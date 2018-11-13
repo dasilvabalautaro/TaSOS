@@ -19,6 +19,7 @@ abstract class BaseActivity: AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         et_search.visibility = View.INVISIBLE
+        tv_name.visibility = View.INVISIBLE
         addFragment(savedInstanceState)
 
     }

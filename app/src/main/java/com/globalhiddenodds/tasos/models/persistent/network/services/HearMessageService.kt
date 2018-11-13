@@ -15,6 +15,12 @@ import javax.inject.Inject
 
 class HearMessageService : Service() {
 
+    private  val constLastMessage = "lastMessage"
+    private  val constSource = "source"
+    private  val constType = "type"
+    private  val constState = "state"
+    private  val constTarget = "target"
+
     private val appComponent: ApplicationComponent by
     lazy(mode = LazyThreadSafetyMode.NONE) {
         (application as App).appComponent
@@ -49,7 +55,7 @@ class HearMessageService : Service() {
         listenerMessageEvent()
 
         return START_STICKY
-        //return super.onStartCommand(intent, flags, startId)
+
     }
 
     private fun listenerMessageEvent() {
@@ -60,7 +66,7 @@ class HearMessageService : Service() {
                         val map: HashMap<*, *>? = dataSnapshot.value as HashMap<*, *>?
                         if (map != null && !Constants.user.id.isEmpty()){
 
-                            getMessage(map)
+                            saveMessage(map)
 
                         }
                     }
@@ -78,7 +84,7 @@ class HearMessageService : Service() {
         showLog("onDestroy")
     }
 
-    private fun getMessage(map: HashMap<*, *>){
+    private fun saveMessage(map: HashMap<*, *>){
         var msg = ""
         var source = ""
         var type = 0
@@ -86,25 +92,16 @@ class HearMessageService : Service() {
         var target = ""
 
         for ((k, v) in map) {
-            if (v is HashMap<*, *>){
-                when {
-                    v["lastMessage"] != null -> msg = v["lastMessage"] as String
-                }
-                when {
-                    v["source"] != null -> source = v["source"] as String
-                }
-                when {
-                    v["type"] != null -> type = (v["type"] as Long).toInt()
-                }
-                when {
-                    v["state"] != null -> state = (v["state"] as Long).toInt()
-                }
-                when {
-                    v["target"] != null -> target = v["target"] as String
-                }
-
+            when (k) {
+                constLastMessage -> if(v != null) msg = v as String
+                constSource -> if(v != null) source = v as String
+                constType -> type = if(v != null && v is Long) (v).toInt() else (v as String).toInt()
+                constState -> state = if(v != null && v is Long) (v).toInt() else (v as String).toInt()
+                constTarget -> if(v != null) target = v as String
             }
+
         }
+
         if (!msg.isEmpty()){
             val dateMessage = System.currentTimeMillis()
             val messageView = MessageView(source, target, msg,
@@ -115,6 +112,25 @@ class HearMessageService : Service() {
         }
     }
 
+    private fun clearFields(){
+        referenceRoot!!.child(rootUser)
+                .child(Constants.user.id)
+                .child(constLastMessage).setValue("")
+        referenceRoot!!.child(rootUser)
+                .child(Constants.user.id)
+                .child(constSource).setValue("")
+        referenceRoot!!.child(rootUser)
+                .child(Constants.user.id)
+                .child(constType).setValue("0")
+        referenceRoot!!.child(rootUser)
+                .child(Constants.user.id)
+                .child(constState).setValue("1")
+        referenceRoot!!.child(rootUser)
+                .child(Constants.user.id)
+                .child(constTarget).setValue("")
+
+    }
+
     fun handleFailure(failure: Failure) {
         if (failure is Failure.DatabaseError){
             showLog("Failure Database")
@@ -122,6 +138,9 @@ class HearMessageService : Service() {
     }
 
     private fun handleResult(value: Boolean){
+        if (value){
+            clearFields()
+        }
         showLog(value.toString())
 
     }

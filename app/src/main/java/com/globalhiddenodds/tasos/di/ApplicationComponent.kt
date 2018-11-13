@@ -7,6 +7,7 @@ import com.globalhiddenodds.tasos.models.persistent.network.services.HearMessage
 import com.globalhiddenodds.tasos.presentation.view.activities.MainActivity
 import com.globalhiddenodds.tasos.presentation.view.fragments.ContactFragment
 import com.globalhiddenodds.tasos.presentation.view.fragments.LoginFragment
+import com.globalhiddenodds.tasos.presentation.view.fragments.MessageFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -19,4 +20,5 @@ interface ApplicationComponent {
     fun inject(loginFragment: LoginFragment)
     fun inject(contactFragment: ContactFragment)
     fun inject(hearMessageService: HearMessageService)
+    fun inject(messageFragment: MessageFragment)
 }

@@ -13,6 +13,7 @@ import kotlin.properties.Delegates
 
 class ContactsAdapter @Inject constructor():
         RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+
     internal var collection: List<GroupMessageView> by Delegates.observable(emptyList()) {
         _, _, _ -> notifyDataSetChanged()
     }

@@ -10,19 +10,16 @@ import com.globalhiddenodds.tasos.extension.addDecorationRecycler
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
-import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository
 import com.globalhiddenodds.tasos.presentation.component.ContactsAdapter
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
-import com.globalhiddenodds.tasos.presentation.data.MessageView
 import kotlinx.android.synthetic.main.view_contacts.*
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.GetContactsViewModel
+import com.globalhiddenodds.tasos.presentation.presenter.GetNewMessageViewModel
 import com.globalhiddenodds.tasos.presentation.presenter.SearchContactViewModel
 import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
 import com.globalhiddenodds.tasos.tools.Constants
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
@@ -37,6 +34,7 @@ class ContactFragment: BaseFragment() {
     private lateinit var searchContactViewModel: SearchContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
     private lateinit var getContactsViewModel: GetContactsViewModel
+    private lateinit var getNewMessageViewModel: GetNewMessageViewModel
 
     private var idTarget = ""
 
@@ -59,15 +57,18 @@ class ContactFragment: BaseFragment() {
             failure(failure, ::handleFailure)
         }
 
-        val prefs = PreferenceRepository.customPrefs(activity!!,
-                Constants.preference_tasos)
-        Constants.user.id = prefs.getString(Constants.userId, "")
+        getNewMessageViewModel = viewModel(viewModelFactory) {
+            observe(result, ::resultListNewMessage)
+            failure(failure, ::handleFailure)
+        }
+
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
+        getNewMessageViewModel.loadNewMessage()
         getContactsViewModel.loadContacts()
     }
 
@@ -81,8 +82,8 @@ class ContactFragment: BaseFragment() {
                 LinearLayoutManager.VERTICAL, false)
         addDecorationRecycler(rv_contacts, context!!)
         rv_contacts.adapter = contactsAdapter
-        /* projectsAdapter.clickListener = { project, navigationExtras ->
-             navigator.showMovieDetails(activity!!, project, navigationExtras) }*/
+        contactsAdapter.clickListener = { group, navigationExtras ->
+             navigator.showMessages(activity!!, group, navigationExtras) }
     }
 
     fun searchContact(search: String){
@@ -105,8 +106,18 @@ class ContactFragment: BaseFragment() {
 
     }
 
-    private fun resultListContact(list: List<GroupMessageView>?){
+    private fun resultListNewMessage(list: List<GroupMessageView>?){
         contactsAdapter.collection = list.orEmpty()
+    }
+
+    private fun resultListContact(list: List<GroupMessageView>?){
+
+        val listPrev = contactsAdapter.collection.toMutableList()
+        if (listPrev.isNotEmpty()){
+            listPrev.addAll(list!!)
+            contactsAdapter.collection = listPrev
+        }
+
     }
 
     private fun resultMessage(value: Boolean?){

@@ -22,17 +22,27 @@
       app:contentInsetStartWithNavigation="0dp">
 
 
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/lbl_search"
-        android:imeOptions="actionSearch"
-        android:layout_marginStart="5dp"
-        android:inputType="text"
-        android:textColor="@android:color/white"
-        android:padding="8dp"
-        tools:ignore="Autofill" />
+  <EditText
+      android:id="@+id/et_search"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/lbl_search"
+      android:imeOptions="actionSearch"
+      android:layout_marginStart="5dp"
+      android:inputType="text"
+      android:textColor="@android:color/white"
+      android:padding="8dp"
+      tools:ignore="Autofill" />
+
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/tv_name"
+      android:transitionName="name"
+      android:layout_marginStart="5dp"
+      android:textStyle="bold"
+      android:textSize="20sp"
+      android:textColor="@android:color/white"/>
 
   </android.support.v7.widget.Toolbar>
 

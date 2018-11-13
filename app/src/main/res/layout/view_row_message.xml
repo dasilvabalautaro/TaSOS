@@ -30,19 +30,6 @@
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/right_one_guideline"
-            card_view:layout_constraintGuide_percent=".60"
-            android:orientation="vertical"/>
-        <android.support.constraint.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/right_two_guideline"
-            card_view:layout_constraintGuide_percent=".75"
-            android:orientation="vertical"/>
-
-        <android.support.constraint.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/top_guideline"
             card_view:layout_constraintGuide_percent=".02"
             android:orientation="horizontal"/>
@@ -58,37 +45,14 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_name"
-            android:transitionName="name"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
+            android:id="@+id/tv_message"
+            android:layout_marginTop="3dp"
+            android:textStyle="normal"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryText"
             card_view:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-            card_view:layout_constraintRight_toRightOf="@+id/right_one_guideline"
+            card_view:layout_constraintRight_toRightOf="@+id/right_guideline"
             card_view:layout_constraintTop_toTopOf="@+id/top_guideline"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/tv_name"
-            android:id="@+id/tv_alert"
-            android:layout_marginStart="3dp"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
-            card_view:layout_constraintTop_toTopOf="@+id/tv_name"
-            card_view:layout_constraintLeft_toLeftOf="@+id/right_one_guideline"
-            card_view:layout_constraintRight_toRightOf="@+id/right_two_guideline"/>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_detail"
-            android:contentDescription="@string/lbl_description_image"
-            card_view:layout_constraintLeft_toLeftOf="@+id/right_two_guideline"
-            card_view:layout_constraintTop_toTopOf="@+id/top_guideline"
-            card_view:layout_constraintRight_toRightOf="@+id/right_guideline"/>
 
     </android.support.constraint.ConstraintLayout>
 
