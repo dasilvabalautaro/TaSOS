@@ -35,6 +35,8 @@ class MessageAdapter @Inject constructor():
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(messageView: MessageView, clickListener: (MessageView, Navigator.Extras) -> Unit) {
             itemView.tv_message.text = messageView.message
+            if (messageView.who)
+                itemView.tv_message.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
             itemView.setOnClickListener {
                 clickListener(messageView,
                         Navigator.Extras(itemView.tv_message))

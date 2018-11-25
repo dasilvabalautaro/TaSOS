@@ -7,13 +7,16 @@ import com.globalhiddenodds.tasos.tools.NetworkHandler
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
+import com.google.firebase.auth.UserProfileChangeRequest
 
 
 interface RepositoryNetwork {
     fun start()
     fun getCurrentUser(user: User): Boolean
     fun createUser(user: User): Either<Failure, Boolean>
+    fun signInUser(user: User): Either<Failure, Boolean>
 
     class Network @Inject constructor(private val networkHandler:
                                              NetworkHandler) : RepositoryNetwork {
@@ -34,9 +37,16 @@ interface RepositoryNetwork {
             val currentUser = this.auth!!.currentUser
 
             return if(currentUser != null){
+                if (!currentUser.displayName.isNullOrEmpty()){
+                    user.id  = currentUser.displayName!!
+                }else{
+                    update(currentUser, user.id)
+                }
+
                 currentUser.getIdToken(true).addOnSuccessListener {
                     if (it.token != null){
                         user.token = it.token!!
+
                     }
                 }
                 true
@@ -56,6 +66,25 @@ interface RepositoryNetwork {
             }
 
         }
+
+        private fun update(currentUser: FirebaseUser, id: String){
+
+            val profileUpdates = UserProfileChangeRequest
+                    .Builder()
+                    .setDisplayName(id)
+                    .build()
+
+            currentUser.updateProfile(profileUpdates)
+                .addOnCompleteListener { task: Task<Void> ->
+                    if (!task.isSuccessful) {
+                        println("Update Profile OK")
+                    }else{
+                        println("Update Profile Fail")
+                    }
+                }
+
+        }
+
         private fun create(user: User): Either<Failure, Boolean>{
 
             this.auth!!.createUserWithEmailAndPassword(user.email,
@@ -65,28 +94,31 @@ interface RepositoryNetwork {
                 }
             }
             return Either.Right(true)
-           /* return try {
-                val response = this.auth!!
-                        .createUserWithEmailAndPassword(user.email, user.password)
-                        .addOnCompleteListener{return@addOnCompleteListener}
-                Thread.sleep(2000)
 
-                if (response.isSuccessful) Either.Right(true)
-                else Either.Left(Failure.ServerError())
-
-            }catch (exception: Throwable){
-                Either.Left(Failure.ServerError())
-            }
-*/
         }
+
+        override fun signInUser(user: User): Either<Failure, Boolean> {
+            start()
+
+            return when (networkHandler.isConnected) {
+                true -> signIn(user)
+                false, null -> Either.Left(Failure.NetworkConnection())
+            }
+
+        }
+
+        private fun signIn(user: User): Either<Failure, Boolean>{
+
+            this.auth!!.signInWithEmailAndPassword(user.email,
+                    user.password).addOnCompleteListener { task: Task<AuthResult> ->
+                if (!task.isSuccessful) {
+                    Either.Left(Failure.ServerError())
+                }
+            }
+            return Either.Right(true)
+
+        }
+
     }
 }
 
-
-//{
-/*this.auth!!.currentUser!!.getIdToken(true).addOnSuccessListener {
-    if (it.token != null){
-        user.token = it.token!!
-    }
-}*/
-//Either.Right(true)}

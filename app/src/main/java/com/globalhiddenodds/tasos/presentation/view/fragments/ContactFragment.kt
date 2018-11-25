@@ -15,10 +15,7 @@ import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import kotlinx.android.synthetic.main.view_contacts.*
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
-import com.globalhiddenodds.tasos.presentation.presenter.GetContactsViewModel
-import com.globalhiddenodds.tasos.presentation.presenter.GetNewMessageViewModel
-import com.globalhiddenodds.tasos.presentation.presenter.SearchContactViewModel
-import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
+import com.globalhiddenodds.tasos.presentation.presenter.*
 import com.globalhiddenodds.tasos.tools.Constants
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.alert
@@ -33,8 +30,7 @@ class ContactFragment: BaseFragment() {
 
     private lateinit var searchContactViewModel: SearchContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
-    private lateinit var getContactsViewModel: GetContactsViewModel
-    private lateinit var getNewMessageViewModel: GetNewMessageViewModel
+    private lateinit var liveDataContactsViewModel: LiveDataContactsViewModel
 
     private var idTarget = ""
 
@@ -52,24 +48,16 @@ class ContactFragment: BaseFragment() {
             failure(failure, ::handleFailure)
         }
 
-        getContactsViewModel = viewModel(viewModelFactory) {
-            observe(result, ::resultListContact)
+        liveDataContactsViewModel = viewModel(viewModelFactory) {
+            observe(result, ::resultLiveDataContact)
             failure(failure, ::handleFailure)
         }
-
-        getNewMessageViewModel = viewModel(viewModelFactory) {
-            observe(result, ::resultListNewMessage)
-            failure(failure, ::handleFailure)
-        }
-
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
-        getNewMessageViewModel.loadNewMessage()
-        getContactsViewModel.loadContacts()
     }
 
     override fun onResume() {
@@ -106,23 +94,17 @@ class ContactFragment: BaseFragment() {
 
     }
 
-    private fun resultListNewMessage(list: List<GroupMessageView>?){
+
+    private fun resultLiveDataContact(list: List<GroupMessageView>?){
         contactsAdapter.collection = list.orEmpty()
     }
 
-    private fun resultListContact(list: List<GroupMessageView>?){
-
-        val listPrev = contactsAdapter.collection.toMutableList()
-        if (listPrev.isNotEmpty()){
-            listPrev.addAll(list!!)
-            contactsAdapter.collection = listPrev
-        }
-
-    }
 
     private fun resultMessage(value: Boolean?){
+        if (value != null && value){
+            context!!.toast(getString(R.string.action_message))
+        }
 
-        context!!.toast(getString(R.string.action_message))
     }
 
     private fun resultSearch(value: Boolean?){

@@ -17,14 +17,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/left_guideline"
-            card_view:layout_constraintGuide_percent=".01"
+            card_view:layout_constraintGuide_percent=".03"
             android:orientation="vertical"/>
 
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/right_guideline"
-            card_view:layout_constraintGuide_percent=".99"
+            card_view:layout_constraintGuide_percent=".97"
             android:orientation="vertical"/>
 
         <android.support.constraint.Guideline

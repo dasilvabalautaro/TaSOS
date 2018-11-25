@@ -13,8 +13,12 @@ import com.globalhiddenodds.tasos.presentation.component.MessageAdapter
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.data.MessageView
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
-import com.globalhiddenodds.tasos.presentation.presenter.GetMessageContactViewModel
+import com.globalhiddenodds.tasos.presentation.presenter.LiveDataMessageContactViewModel
+import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
+import com.globalhiddenodds.tasos.presentation.presenter.UpdateStateMessageViewModel
 import com.globalhiddenodds.tasos.presentation.view.activities.MessageActivity
+import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.Variables
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_message.*
 
@@ -37,15 +41,30 @@ class MessageFragment: BaseFragment() {
     @Inject
     lateinit var messageAdapter: MessageAdapter
 
-    private lateinit var getMessageContactViewModel: GetMessageContactViewModel
+    private lateinit var liveDataMessageContactViewModel: LiveDataMessageContactViewModel
+    private lateinit var sendMessageViewModel: SendMessageViewModel
+    private lateinit var updateStateMessageViewModel: UpdateStateMessageViewModel
 
     override fun layoutId() = R.layout.view_message
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appComponent.inject(this)
-        getMessageContactViewModel = viewModel(viewModelFactory) {
+
+        Variables.source = (arguments?.get(paramGroup)
+                as GroupMessageView).source
+        liveDataMessageContactViewModel = viewModel(viewModelFactory) {
             observe(result, ::resultMessages)
+            failure(failure, ::handleFailure)
+        }
+
+        sendMessageViewModel = viewModel(viewModelFactory) {
+            observe(result, ::resultSendMessage)
+            failure(failure, ::handleFailure)
+        }
+
+        updateStateMessageViewModel = viewModel(viewModelFactory) {
+            observe(result, ::resultUpdateMessage)
             failure(failure, ::handleFailure)
         }
 
@@ -55,18 +74,31 @@ class MessageFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
         if (firstTimeCreated(savedInstanceState)) {
-            getMessageContactViewModel.source = (arguments?.get(paramGroup)
+
+            /*getMessageContactViewModel.source = (arguments?.get(paramGroup)
                     as GroupMessageView).source
-            getMessageContactViewModel.loadMessage()
+            getMessageContactViewModel.loadMessage()*/
 
         }
+
+        ib_send.setOnClickListener { executeSend() }
     }
 
     override fun onResume() {
         super.onResume()
         (activity as MessageActivity).tv_name.text = (arguments!!.get(paramGroup)
                 as GroupMessageView).source
+        val quantity = (arguments!!.get(paramGroup)
+                as GroupMessageView).quantity
+        if (quantity > 0){
+            updateStateMessageViewModel.source = (arguments!!.get(paramGroup)
+                    as GroupMessageView).source
+            updateStateMessageViewModel.updateStateMessages()
+            (arguments!!.get(paramGroup)
+                    as GroupMessageView).quantity = 0
+        }
     }
+
     private fun initializeView(){
         rv_messages!!.setHasFixedSize(true)
         rv_messages!!.layoutManager = LinearLayoutManager(activity,
@@ -76,6 +108,57 @@ class MessageFragment: BaseFragment() {
         /*contactsAdapter.clickListener = { group, navigationExtras ->
             navigator.showMessages(activity!!, group, navigationExtras) }*/
     }
+
+
+
+    private fun addRecyclerMessage(msg: String){
+        val source = Constants.user.id
+        val dateMessage = System.currentTimeMillis()
+        val target = (arguments!!.get(paramGroup)
+                as GroupMessageView).source
+        val messageView = MessageView(source, target, msg,
+                dateMessage, 0, 0, true )
+        val listMessage = messageAdapter
+                .collection.toMutableList()
+        listMessage.add(messageView)
+        messageAdapter.collection = listMessage
+    }
+
+    private fun sendMessage(msg: String){
+        val target = (arguments!!.get(paramGroup)
+                as GroupMessageView).source
+        val map = mapOf("idTarget" to target,
+                "message" to msg,
+                "state" to 1, "source" to Constants.user.id,
+                "type" to 0, "target" to target)
+        sendMessageViewModel.map = map
+        sendMessageViewModel.sendMessage()
+
+    }
+
+    private fun executeSend(){
+        val msg =  et_send.text.toString()
+        if (!msg.isEmpty()){
+            addRecyclerMessage(msg)
+            sendMessage(msg)
+        }
+    }
+
+
+    private fun resultSendMessage(value: Boolean?){
+        if (value != null && value){
+            context!!.toast(getString(R.string.action_message))
+        }
+
+    }
+
+    private fun resultUpdateMessage(value: Boolean?){
+        if (value != null && value){
+            context!!.toast(getString(R.string.action_message))
+        }
+
+    }
+
 
     private fun resultMessages(list: List<MessageView>?){
         messageAdapter.collection = list.orEmpty()

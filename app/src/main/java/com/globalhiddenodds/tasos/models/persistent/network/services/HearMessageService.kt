@@ -105,7 +105,7 @@ class HearMessageService : Service() {
         if (!msg.isEmpty()){
             val dateMessage = System.currentTimeMillis()
             val messageView = MessageView(source, target, msg,
-                    dateMessage, type, state)
+                    dateMessage, type, state, false)
             saveMessageUseCase(messageView){
                 it.either(::handleFailure, ::handleResult)}
 

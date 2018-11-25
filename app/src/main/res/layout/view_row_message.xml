@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_message"
             android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
             android:textStyle="normal"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryText"

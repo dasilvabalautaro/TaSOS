@@ -12,11 +12,15 @@
     <string name="action_refresh">Refresh</string>
     <string name="failure_network_connection">No Network Connection.</string>
     <string name="failure_server_error">Server Error</string>
+    <string name="failure_database_error">Database Error</string>
     <string name="failure_input">Input Error</string>
     <string name="lbl_search">Search Contact</string>
     <string name="msg_search_process">Search in process</string>
     <string name="lbl_configuration">Configuration</string>
     <string name="action_message">Message send OK</string>
+    <string name="failure_authenticate">Authenticate Fail.</string>
     <string name="action_invitation">He wants to be your friend.</string>
+    <string name="update_profile_ok">Update Profile OK</string>
+    <string name="update_profile_fail">Update Profile fail</string>
 
 </resources>

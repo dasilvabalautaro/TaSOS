@@ -14,7 +14,8 @@ class SaveMessageUseCase @Inject constructor(private val messageDataDao:
     override suspend fun run(params: MessageView): Either<Failure, Boolean> {
         return try {
             val messageData = MessageData(0, params.source, params.target,
-                    params.message, params.dateMessage, params.type, params.state)
+                    params.message, params.dateMessage, params.type,
+                    params.state, params.who)
             messageDataDao.insert(messageData)
             Either.Right(true)
         }catch (exception: Throwable){

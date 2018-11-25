@@ -18,7 +18,7 @@ import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.di.ApplicationComponent
 import com.globalhiddenodds.tasos.extension.appContext
 import com.globalhiddenodds.tasos.extension.viewContainer
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.progress.*
 import com.globalhiddenodds.tasos.R.color
 import com.globalhiddenodds.tasos.models.exception.Failure
 import io.reactivex.disposables.CompositeDisposable
@@ -66,6 +66,7 @@ abstract class BaseFragment: Fragment() {
         when (failure) {
             is Failure.NetworkConnection -> renderFailure(R.string.failure_network_connection)
             is Failure.ServerError -> renderFailure(R.string.failure_server_error)
+            is Failure.DatabaseError -> renderFailure(R.string.failure_database_error)
         }
     }
 

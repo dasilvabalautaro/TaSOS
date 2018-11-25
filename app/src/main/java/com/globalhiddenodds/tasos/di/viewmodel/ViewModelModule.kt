@@ -40,21 +40,28 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(GetContactsViewModel::class)
-    abstract fun bindsGetContactsViewModel(getContactsViewModel:
-                                               GetContactsViewModel): ViewModel
+    @ViewModelKey(SignInUserViewModel::class)
+    abstract fun bindsSignInUserViewModel(signInUserViewModel:
+                                              SignInUserViewModel): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(GetNewMessageViewModel::class)
-    abstract fun bindsGetNewMessageViewModel(getNewMessageViewModel:
-                                                 GetNewMessageViewModel): ViewModel
+    @ViewModelKey(UpdateStateMessageViewModel::class)
+    abstract fun bindsUpdateStateMessageViewModel(updateStateMessageViewModel:
+                                                      UpdateStateMessageViewModel): ViewModel
+
 
     @Binds
     @IntoMap
-    @ViewModelKey(GetMessageContactViewModel::class)
-    abstract fun bindsGetMessageContactViewModel(getMessageContactViewModel:
-                                                     GetMessageContactViewModel): ViewModel
+    @ViewModelKey(LiveDataContactsViewModel::class)
+    abstract fun bindsLiveDataContactsViewModel(liveDataContactsViewModel:
+                                                      LiveDataContactsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LiveDataMessageContactViewModel::class)
+    abstract fun bindsLiveDataMessageContactViewModel(liveDataMessageContactViewModel:
+                                                          LiveDataMessageContactViewModel): ViewModel
 
 
 }
