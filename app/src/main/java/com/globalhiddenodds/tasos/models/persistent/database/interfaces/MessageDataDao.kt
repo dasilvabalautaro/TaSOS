@@ -3,15 +3,13 @@ package com.globalhiddenodds.tasos.models.persistent.database.interfaces
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.globalhiddenodds.tasos.models.persistent.database.data.MessageData
-import com.globalhiddenodds.tasos.models.persistent.database.data.SSetContacts
-import com.globalhiddenodds.tasos.models.persistent.database.data.SSetMessages
 import com.globalhiddenodds.tasos.models.persistent.database.data.SSetNewMessageQuantity
 
 @Dao
 interface MessageDataDao {
 
     @Query("SELECT * FROM messageData")
-    fun getAll(): List<MessageData>
+    fun getAll(): LiveData<List<MessageData>>
 
     @Query("SELECT source, SUM(state) AS quantity FROM messageData GROUP BY source ORDER BY dateMessage")
     fun getLiveDataContacts(): LiveData<List<SSetNewMessageQuantity>>

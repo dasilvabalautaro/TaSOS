@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.WindowManager
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
@@ -29,6 +30,7 @@ class MessageActivity: BaseActivity() {
         this.tv_name.visibility = View.VISIBLE
         this.et_search.layoutParams.width = 0
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

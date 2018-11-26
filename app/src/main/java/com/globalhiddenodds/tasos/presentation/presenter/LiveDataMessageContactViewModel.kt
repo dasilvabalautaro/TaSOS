@@ -12,6 +12,8 @@ import javax.inject.Inject
 class LiveDataMessageContactViewModel @Inject constructor(messageDataDao:
                                                           MessageDataDao):
         BaseViewModel()  {
+
+
     var source = Variables.source
     val result: LiveData<List<MessageView>> = Transformations
             .map(messageDataDao.getMessageOfContact(source), ::handleMessages)

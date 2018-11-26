@@ -33,12 +33,15 @@ class ApplicationModule(private val app: App) {
     fun provideHandleSendMessage(handleSendMessage: HandleSendMessage.SendMessage):
             HandleSendMessage = handleSendMessage
 
-    @Provides fun provideAppDatabase(context: Context): AppDatabase =
+    @Provides
+    @Singleton
+    fun provideAppDatabase(context: Context): AppDatabase =
             Room.databaseBuilder(context,
                     AppDatabase::class.java,
                     databaseName).allowMainThreadQueries().build()
 
     @Provides
+    @Singleton
     fun provideMessageDao(database: AppDatabase) = database.messageDao()
 
 }

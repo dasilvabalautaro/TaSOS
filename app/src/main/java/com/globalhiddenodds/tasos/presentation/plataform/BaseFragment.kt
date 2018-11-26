@@ -4,6 +4,7 @@ package com.globalhiddenodds.tasos.presentation.plataform
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import android.hardware.input.InputManager
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
@@ -11,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
@@ -24,6 +26,9 @@ import com.globalhiddenodds.tasos.models.exception.Failure
 import io.reactivex.disposables.CompositeDisposable
 
 import javax.inject.Inject
+import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
+
+
 
 abstract class BaseFragment: Fragment() {
     abstract fun layoutId(): Int
@@ -72,4 +77,14 @@ abstract class BaseFragment: Fragment() {
 
     internal fun Context.toast(message: CharSequence) =
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+
+    internal fun hideKeyboard(activity: BaseActivity) {
+        val view = activity.currentFocus?: View(activity)
+        val imm = activity
+                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
 }

@@ -12,6 +12,7 @@ import com.globalhiddenodds.tasos.extension.viewModel
 import com.globalhiddenodds.tasos.presentation.component.MessageAdapter
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.data.MessageView
+import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.LiveDataMessageContactViewModel
 import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
@@ -25,7 +26,6 @@ import kotlinx.android.synthetic.main.view_message.*
 import javax.inject.Inject
 
 class MessageFragment: BaseFragment() {
-
     companion object {
         private const val paramGroup = "param_group"
         fun forGroup(group: GroupMessageView): MessageFragment{
@@ -40,7 +40,6 @@ class MessageFragment: BaseFragment() {
 
     @Inject
     lateinit var messageAdapter: MessageAdapter
-
     private lateinit var liveDataMessageContactViewModel: LiveDataMessageContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
     private lateinit var updateStateMessageViewModel: UpdateStateMessageViewModel
@@ -53,6 +52,7 @@ class MessageFragment: BaseFragment() {
 
         Variables.source = (arguments?.get(paramGroup)
                 as GroupMessageView).source
+
         liveDataMessageContactViewModel = viewModel(viewModelFactory) {
             observe(result, ::resultMessages)
             failure(failure, ::handleFailure)
@@ -74,11 +74,6 @@ class MessageFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
         if (firstTimeCreated(savedInstanceState)) {
-
-            /*getMessageContactViewModel.source = (arguments?.get(paramGroup)
-                    as GroupMessageView).source
-            getMessageContactViewModel.loadMessage()*/
-
         }
 
         ib_send.setOnClickListener { executeSend() }
@@ -99,17 +94,21 @@ class MessageFragment: BaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        updateStateMessageViewModel.source = (arguments!!.get(paramGroup)
+                as GroupMessageView).source
+        updateStateMessageViewModel.updateStateMessages()
+    }
+
     private fun initializeView(){
         rv_messages!!.setHasFixedSize(true)
         rv_messages!!.layoutManager = LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false)
-        addDecorationRecycler(rv_messages, context!!)
         rv_messages.adapter = messageAdapter
         /*contactsAdapter.clickListener = { group, navigationExtras ->
             navigator.showMessages(activity!!, group, navigationExtras) }*/
     }
-
-
 
     private fun addRecyclerMessage(msg: String){
         val source = Constants.user.id
@@ -141,12 +140,15 @@ class MessageFragment: BaseFragment() {
         if (!msg.isEmpty()){
             addRecyclerMessage(msg)
             sendMessage(msg)
+            et_send.text.clear()
+            hideKeyboard(activity as BaseActivity)
         }
     }
 
 
     private fun resultSendMessage(value: Boolean?){
         if (value != null && value){
+
             context!!.toast(getString(R.string.action_message))
         }
 
