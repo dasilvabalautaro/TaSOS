@@ -1,6 +1,5 @@
 package com.globalhiddenodds.tasos.presentation.view.activities
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,14 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.globalhiddenodds.tasos.R
-import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository
-import com.globalhiddenodds.tasos.models.persistent.network.services.HearMessageService
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.view.fragments.ContactFragment
-import com.globalhiddenodds.tasos.tools.Constants
 import kotlinx.android.synthetic.main.toolbar.*
 
-@Suppress("DEPRECATION")
 class ContactActivity: BaseActivity() {
     companion object {
         fun callingIntent(context: Context) = Intent(context,
@@ -24,20 +19,39 @@ class ContactActivity: BaseActivity() {
 
     override fun fragment() = ContactFragment()
 
+/*
+    var serviceMessageIntent: Intent? = null
+    var hearMessageService: HearMessageService? = null
+    var isBound = false
+*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.et_search.visibility = View.VISIBLE
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
-        val prefs = PreferenceRepository.customPrefs(this,
-                Constants.preference_tasos)
-        Constants.user.id = prefs.getString(Constants.userId, "")
-
-        if (!checkServiceRunning()){
-            val intent = Intent(this, HearMessageService::class.java)
-            startService(intent)
-        }
     }
+
+/*
+    override fun onStart() {
+        super.onStart()
+        bindService(serviceMessageIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+*/
+
+  /*  private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName,
+                                        service: IBinder) {
+            val binder = service as
+                    HearMessageService.LocalBinder
+            hearMessageService = binder.getService()
+            isBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            isBound = false
+        }
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
@@ -64,14 +78,13 @@ class ContactActivity: BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun checkServiceRunning(): Boolean {
-        val manager = getSystemService(Context
-                .ACTIVITY_SERVICE) as ActivityManager
-        manager.getRunningServices(Integer.MAX_VALUE).forEach { service ->
-            if ("com.globalhiddenodds.tasos.models.persistent.network.services.HearMessageService" == service.service.className) {
-                return true
-            }
-        }
-        return false
+    override fun onDestroy() {
+      /*  if (isBound){
+            unbindService(serviceConnection)
+            isBound = false
+        }*/
+        println("OnDestroy Contact Activity")
+        super.onDestroy()
     }
+
 }

@@ -22,5 +22,10 @@
     <string name="action_invitation">He wants to be your friend.</string>
     <string name="update_profile_ok">Update Profile OK</string>
     <string name="update_profile_fail">Update Profile fail</string>
-
+    <string name="foreground_message">Welcome to the app!</string>
+    <string name="background_message">Goodbye!</string>
+    <string name="destroy_message">I am dead!</string>
+    <string name="create_message">I am created!</string>
+    <string name="new_message_notify">New Message</string>
+    <string name="channel_description">Description notification message channel</string>
 </resources>

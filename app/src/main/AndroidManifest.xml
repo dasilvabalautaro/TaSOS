@@ -24,15 +24,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.view.activities.LoginActivity" />
-        <activity android:name=".presentation.view.activities.ContactActivity" />
-        <activity android:name=".presentation.view.activities.MessageActivity"/>
+        <activity android:name=".presentation.view.activities.LoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".presentation.view.activities.ContactActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".presentation.view.activities.MessageActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <service
             android:name=".models.persistent.network.services.HearMessageService"
+            android:enabled="true"/>
+
+      <!--  <receiver
+            android:name=".models.persistent.network.services.HearMessageRestartBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:permission="true"/>
+            android:label="RestartServiceWhenStopped">
+        </receiver>-->
 
     </application>
 

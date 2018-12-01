@@ -30,7 +30,7 @@ class MessageActivity: BaseActivity() {
         this.tv_name.visibility = View.VISIBLE
         this.et_search.layoutParams.width = 0
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

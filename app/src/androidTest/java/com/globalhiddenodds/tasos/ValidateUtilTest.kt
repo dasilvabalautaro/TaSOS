@@ -23,4 +23,11 @@ class ValidateUtilTest {
 
     }
 
+    @Test
+    fun validaName(){
+        val result = Validate.getName("david")
+        val expected = "david"
+        Assert.assertEquals("Name correct", expected, result)
+    }
+
 }

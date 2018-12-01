@@ -2,6 +2,7 @@ package com.globalhiddenodds.tasos.presentation.view.fragments
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.StringRes
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -11,6 +12,7 @@ import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
 import com.globalhiddenodds.tasos.presentation.component.ContactsAdapter
+import com.globalhiddenodds.tasos.presentation.component.Notify
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import kotlinx.android.synthetic.main.view_contacts.*
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
@@ -27,6 +29,9 @@ class ContactFragment: BaseFragment() {
     lateinit var navigator: Navigator
     @Inject
     lateinit var contactsAdapter: ContactsAdapter
+    @Inject
+    lateinit var notify: Notify
+
 
     private lateinit var searchContactViewModel: SearchContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
@@ -57,6 +62,7 @@ class ContactFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        notify.cancelAllNotification()
         initializeView()
     }
 
@@ -71,7 +77,7 @@ class ContactFragment: BaseFragment() {
         addDecorationRecycler(rv_contacts, context!!)
         rv_contacts.adapter = contactsAdapter
         contactsAdapter.clickListener = { group, navigationExtras ->
-             navigator.showMessages(activity!!, group, navigationExtras) }
+            navigator.showMessages(activity!!, group, navigationExtras) }
     }
 
     fun searchContact(search: String){
@@ -96,7 +102,11 @@ class ContactFragment: BaseFragment() {
 
 
     private fun resultLiveDataContact(list: List<GroupMessageView>?){
-        contactsAdapter.collection = list.orEmpty()
+        Handler().postDelayed({
+            contactsAdapter.collection = list.orEmpty()
+            rv_contacts!!.refreshDrawableState()
+
+        }, 1000)
     }
 
 

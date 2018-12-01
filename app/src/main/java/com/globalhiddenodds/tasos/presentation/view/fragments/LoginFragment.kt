@@ -95,7 +95,8 @@ class LoginFragment: BaseFragment() {
         if (value != null && value){
             val splitEmail = Constants.user.email.split("@")
             val prefix = (1000..9000).shuffled().last()
-            val id = splitEmail[0] + "-" + prefix.toString()
+            val nameUser = Validate.getName(splitEmail[0])
+            val id = nameUser + "-" + prefix.toString()
             Constants.user.id = id
             createUserDBViewModel.createUser()
         }

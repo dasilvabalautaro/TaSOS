@@ -1,11 +1,11 @@
 package com.globalhiddenodds.tasos.presentation.view.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.StringRes
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.globalhiddenodds.tasos.R
-import com.globalhiddenodds.tasos.extension.addDecorationRecycler
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
@@ -22,8 +22,11 @@ import com.globalhiddenodds.tasos.tools.Constants
 import com.globalhiddenodds.tasos.tools.Variables
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_message.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 import javax.inject.Inject
+
 
 class MessageFragment: BaseFragment() {
     companion object {
@@ -83,22 +86,18 @@ class MessageFragment: BaseFragment() {
         super.onResume()
         (activity as MessageActivity).tv_name.text = (arguments!!.get(paramGroup)
                 as GroupMessageView).source
-        val quantity = (arguments!!.get(paramGroup)
-                as GroupMessageView).quantity
-        if (quantity > 0){
-            updateStateMessageViewModel.source = (arguments!!.get(paramGroup)
-                    as GroupMessageView).source
-            updateStateMessageViewModel.updateStateMessages()
-            (arguments!!.get(paramGroup)
-                    as GroupMessageView).quantity = 0
-        }
+        (arguments!!.get(paramGroup)
+                as GroupMessageView).quantity = 0
     }
 
     override fun onPause() {
         super.onPause()
-        updateStateMessageViewModel.source = (arguments!!.get(paramGroup)
-                as GroupMessageView).source
-        updateStateMessageViewModel.updateStateMessages()
+        GlobalScope.launch {
+            updateStateMessageViewModel.source = (arguments!!.get(paramGroup)
+                    as GroupMessageView).source
+            updateStateMessageViewModel.updateStateMessages()
+
+        }
     }
 
     private fun initializeView(){
@@ -110,18 +109,6 @@ class MessageFragment: BaseFragment() {
             navigator.showMessages(activity!!, group, navigationExtras) }*/
     }
 
-    private fun addRecyclerMessage(msg: String){
-        val source = Constants.user.id
-        val dateMessage = System.currentTimeMillis()
-        val target = (arguments!!.get(paramGroup)
-                as GroupMessageView).source
-        val messageView = MessageView(source, target, msg,
-                dateMessage, 0, 0, true )
-        val listMessage = messageAdapter
-                .collection.toMutableList()
-        listMessage.add(messageView)
-        messageAdapter.collection = listMessage
-    }
 
     private fun sendMessage(msg: String){
         val target = (arguments!!.get(paramGroup)
@@ -138,7 +125,6 @@ class MessageFragment: BaseFragment() {
     private fun executeSend(){
         val msg =  et_send.text.toString()
         if (!msg.isEmpty()){
-            addRecyclerMessage(msg)
             sendMessage(msg)
             et_send.text.clear()
             hideKeyboard(activity as BaseActivity)
@@ -163,7 +149,38 @@ class MessageFragment: BaseFragment() {
 
 
     private fun resultMessages(list: List<MessageView>?){
-        messageAdapter.collection = list.orEmpty()
+
+        if (!list.isNullOrEmpty()){
+
+            GlobalScope.launch {
+                messageAdapter.setObjectList(list as ArrayList<MessageView>)
+
+                messageAdapter.notifyDataSetChanged()
+                try {
+                    activity!!.runOnUiThread {
+                        //rv_messages!!.refreshDrawableState()
+                        Handler().postDelayed({
+                            try {
+
+                                rv_messages!!.scrollToPosition(messageAdapter.collection.count() - 1)
+
+
+                            }catch (ex: KotlinNullPointerException){
+                                println(ex.message)
+                            }
+
+                        }, 1000)
+
+                    }
+
+                }catch (ex: KotlinNullPointerException){
+                    println(ex.message)
+                }
+            }
+
+        }else{
+            println("Size list recycler EMPTY")
+        }
 
     }
 

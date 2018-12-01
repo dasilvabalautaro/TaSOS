@@ -14,7 +14,7 @@ interface MessageDataDao {
     @Query("SELECT source, SUM(state) AS quantity FROM messageData GROUP BY source ORDER BY dateMessage")
     fun getLiveDataContacts(): LiveData<List<SSetNewMessageQuantity>>
 
-    @Query("SELECT * FROM messageData WHERE source LIKE :source ORDER BY dateMessage")
+    @Query("SELECT * FROM (SELECT * FROM messageData WHERE source LIKE :source ORDER BY dateMessage DESC LIMIT 30) sub ORDER BY dateMessage ASC")
     fun getMessageOfContact(source: String): LiveData<List<MessageData>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
