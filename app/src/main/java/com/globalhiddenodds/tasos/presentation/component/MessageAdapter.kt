@@ -10,10 +10,13 @@ import com.globalhiddenodds.tasos.extension.inflate
 import com.globalhiddenodds.tasos.presentation.data.MessageView
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import kotlinx.android.synthetic.main.view_row_message.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.backgroundResource
 import javax.inject.Inject
+import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
 class MessageAdapter @Inject constructor():
@@ -42,8 +45,8 @@ class MessageAdapter @Inject constructor():
                         .collection, itemList))
         this.collection.clear()
         this.collection.addAll(itemList)
+        Thread.sleep(1000)
         diffResult.dispatchUpdatesTo(this)
-
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

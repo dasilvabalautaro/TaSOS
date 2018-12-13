@@ -10,7 +10,10 @@ import com.globalhiddenodds.tasos.tools.Constants
 import com.google.firebase.database.*
 import java.util.HashMap
 import javax.inject.Inject
+import javax.inject.Singleton
 
+
+@Singleton
 class FirebaseDbToRoom @Inject constructor(private val saveMessageUseCase:
                                            SaveMessageUseCase,
                                            private val notify: Notify,
@@ -117,13 +120,18 @@ class FirebaseDbToRoom @Inject constructor(private val saveMessageUseCase:
 
     }
 
+    fun clearValueFieldFirebase(field: String){
+        referenceRoot!!.child(rootUser)
+                .child(Constants.user.id)
+                .child(field).setValue("")
+    }
+
     private fun showNotify(source: String){
         val prefs = PreferenceRepository.customPrefs(context,
                 Constants.preference_tasos)
         val runProcess = prefs.getString(Constants.run, "")
         if (runProcess.isNotEmpty() && runProcess == "0"){
-            notify.defineNotification(source, "New Message")
-            notify.showNotification()
+            notify.sendNotification(source)
         }
 
     }

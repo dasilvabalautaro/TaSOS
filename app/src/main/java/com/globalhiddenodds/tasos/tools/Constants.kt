@@ -7,4 +7,5 @@ object Constants {
     const val preference_tasos = "com.globalhiddenodds.tasos.PREFERENCE_FILE_KEY"
     const val userId = "user_id"
     const val run = "run"
+    const val web_rtc = "https://webrtchermes.firebaseapp.com/"
 }

@@ -11,6 +11,7 @@ import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.view.activities.LoginActivity
 import com.globalhiddenodds.tasos.presentation.view.activities.ContactActivity
 import com.globalhiddenodds.tasos.presentation.view.activities.MessageActivity
+import com.globalhiddenodds.tasos.presentation.view.activities.WebActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,6 +22,9 @@ class Navigator @Inject constructor(private val repositoryNetwork: RepositoryNet
 
     fun showContact(context: Context) = context
             .startActivity(ContactActivity.callingIntent(context))
+
+    fun showWeb(context: Context, source: String, target: String) = context
+            .startActivity(WebActivity.callingIntent(context, source, target))
 
     fun showMain(context: Context, user: User) {
         when (repositoryNetwork.getCurrentUser(user)) {

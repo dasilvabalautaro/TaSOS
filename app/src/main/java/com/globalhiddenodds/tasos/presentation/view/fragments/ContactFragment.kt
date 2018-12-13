@@ -4,6 +4,7 @@ package com.globalhiddenodds.tasos.presentation.view.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.StringRes
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.globalhiddenodds.tasos.R
@@ -19,6 +20,7 @@ import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.*
 import com.globalhiddenodds.tasos.tools.Constants
+import kotlinx.android.synthetic.main.view_row_contact.*
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
@@ -68,7 +70,8 @@ class ContactFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        context!!.toast(Constants.user.id)
+        tv_name_user.text = Constants.user.id
+
     }
     private fun initializeView(){
         rv_contacts!!.setHasFixedSize(true)
@@ -112,7 +115,7 @@ class ContactFragment: BaseFragment() {
 
     private fun resultMessage(value: Boolean?){
         if (value != null && value){
-            context!!.toast(getString(R.string.action_message))
+            //context!!.toast(getString(R.string.action_message))
         }
 
     }

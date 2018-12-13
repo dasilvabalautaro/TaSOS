@@ -127,7 +127,8 @@ class MessageFragment: BaseFragment() {
         if (!msg.isEmpty()){
             sendMessage(msg)
             et_send.text.clear()
-            hideKeyboard(activity as BaseActivity)
+
+            //hideKeyboard(activity as BaseActivity)
         }
     }
 
@@ -135,14 +136,14 @@ class MessageFragment: BaseFragment() {
     private fun resultSendMessage(value: Boolean?){
         if (value != null && value){
 
-            context!!.toast(getString(R.string.action_message))
+            //context!!.toast(getString(R.string.action_message))
         }
 
     }
 
     private fun resultUpdateMessage(value: Boolean?){
         if (value != null && value){
-            context!!.toast(getString(R.string.action_message))
+            //context!!.toast(getString(R.string.action_message))
         }
 
     }
@@ -154,14 +155,13 @@ class MessageFragment: BaseFragment() {
 
             GlobalScope.launch {
                 messageAdapter.setObjectList(list as ArrayList<MessageView>)
-
                 messageAdapter.notifyDataSetChanged()
                 try {
                     activity!!.runOnUiThread {
                         //rv_messages!!.refreshDrawableState()
+
                         Handler().postDelayed({
                             try {
-
                                 rv_messages!!.scrollToPosition(messageAdapter.collection.count() - 1)
 
 

@@ -42,6 +42,8 @@ interface ManagerUserCloud {
             userCloud.target = ""
             userCloud.state = 0
             userCloud.type = 0
+            userCloud.token = ""
+            userCloud.data = ""
             userCloud.contacts.add("")
             return  userCloud
         }

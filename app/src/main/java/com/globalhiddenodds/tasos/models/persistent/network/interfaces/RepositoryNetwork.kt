@@ -2,7 +2,9 @@ package com.globalhiddenodds.tasos.models.persistent.network.interfaces
 
 import com.globalhiddenodds.tasos.domain.functional.Either
 import com.globalhiddenodds.tasos.models.data.User
+import com.globalhiddenodds.tasos.models.data.UserCloud
 import com.globalhiddenodds.tasos.models.exception.Failure
+import com.globalhiddenodds.tasos.models.persistent.network.RegisterTokenFCM
 import com.globalhiddenodds.tasos.tools.NetworkHandler
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -10,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 interface RepositoryNetwork {
@@ -19,14 +25,16 @@ interface RepositoryNetwork {
     fun signInUser(user: User): Either<Failure, Boolean>
 
     class Network @Inject constructor(private val networkHandler:
-                                             NetworkHandler) : RepositoryNetwork {
+                                             NetworkHandler,
+                                      private val registerTokenFCM:
+                                      RegisterTokenFCM) :
+            RepositoryNetwork {
 
         private var auth: FirebaseAuth? = null
 
         override fun start() {
             if (this.auth == null){
                 this.auth = FirebaseAuth.getInstance()
-
             }
 
         }
@@ -43,12 +51,14 @@ interface RepositoryNetwork {
                     update(currentUser, user.id)
                 }
 
-                currentUser.getIdToken(true).addOnSuccessListener {
+                GlobalScope.launch { registerTokenFCM.getTokenFCM() }
+
+               /* currentUser.getIdToken(true).addOnSuccessListener {
                     if (it.token != null){
                         user.token = it.token!!
-
+                        println("TOKEN ID TASOS: ${user.token}")
                     }
-                }
+                }*/
                 true
             }else{
                 false

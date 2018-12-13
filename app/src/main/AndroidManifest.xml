@@ -3,7 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.globalhiddenodds.tasos">
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission tools:ignore="ProtectedPermissions"
+        android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -14,6 +25,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="false" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_sound"
+            android:resource="@raw/video_chat" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_video" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
         <activity
             android:name=".presentation.view.activities.MainActivity"
             android:noHistory="true"
@@ -30,16 +55,31 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".presentation.view.activities.MessageActivity"
             android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".presentation.view.activities.WebActivity">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".models.persistent.network.services.HearMessageService"
             android:enabled="true"/>
+        <service android:name=".models.persistent.network.services.TasosFirebaseMessagingService"
+            android:stopWithTask="false"
+            android:permission="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
-      <!--  <receiver
-            android:name=".models.persistent.network.services.HearMessageRestartBroadcastReceiver"
-            android:enabled="true"
-            android:label="RestartServiceWhenStopped">
-        </receiver>-->
+        <!--  <receiver
+              android:name=".models.persistent.network.services.HearMessageRestartBroadcastReceiver"
+              android:enabled="true"
+              android:label="RestartServiceWhenStopped">
+          </receiver>-->
 
     </application>
 

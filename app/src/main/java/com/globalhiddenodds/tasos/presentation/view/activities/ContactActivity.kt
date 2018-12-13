@@ -6,16 +6,29 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
+import com.globalhiddenodds.tasos.di.ApplicationComponent
+import com.globalhiddenodds.tasos.models.persistent.network.services.ManagerServices
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.view.fragments.ContactFragment
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 class ContactActivity: BaseActivity() {
+    private val appComponent: ApplicationComponent by
+    lazy(mode = LazyThreadSafetyMode.NONE) {
+        (application as App).appComponent
+    }
+
     companion object {
+
         fun callingIntent(context: Context) = Intent(context,
                 ContactActivity::class.java)
     }
+
+    @Inject
+    lateinit var managerServices: ManagerServices
 
     override fun fragment() = ContactFragment()
 
@@ -27,10 +40,13 @@ class ContactActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        appComponent.inject(this)
         this.et_search.visibility = View.VISIBLE
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        managerServices.start()
 
     }
+
 
 /*
     override fun onStart() {
@@ -55,6 +71,7 @@ class ContactActivity: BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+        menu!!.findItem(R.id.action_video).isVisible = false
         return true
 
     }
@@ -78,13 +95,6 @@ class ContactActivity: BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDestroy() {
-      /*  if (isBound){
-            unbindService(serviceConnection)
-            isBound = false
-        }*/
-        println("OnDestroy Contact Activity")
-        super.onDestroy()
-    }
+
 
 }

@@ -71,6 +71,8 @@ dependencies {
     implementation applicationDependencies.firebaseCore
     implementation applicationDependencies.firebaseAuth
     implementation applicationDependencies.firebaseDatabase
+    implementation applicationDependencies.firebaseMessaging
+    implementation applicationDependencies.firebaseFunctions
     implementation applicationDependencies.rxjava
     implementation applicationDependencies.rxandroid
     implementation applicationDependencies.anko

@@ -7,5 +7,7 @@ class UserCloud {
     var target: String = ""
     var state: Int = 0
     var type: Int = 0
+    var token: String = ""
+    var data: String = ""
     var contacts: ArrayList<String> = ArrayList()
 }

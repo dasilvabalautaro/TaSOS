@@ -1,5 +1,7 @@
 package com.globalhiddenodds.tasos.presentation.component
 
+import android.content.Context
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup

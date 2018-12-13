@@ -15,6 +15,7 @@
     <string name="failure_database_error">Database Error</string>
     <string name="failure_input">Input Error</string>
     <string name="lbl_search">Search Contact</string>
+    <string name="lbl_video">Video Chat</string>
     <string name="msg_search_process">Search in process</string>
     <string name="lbl_configuration">Configuration</string>
     <string name="action_message">Message send OK</string>
@@ -24,8 +25,13 @@
     <string name="update_profile_fail">Update Profile fail</string>
     <string name="foreground_message">Welcome to the app!</string>
     <string name="background_message">Goodbye!</string>
+    <string name="send_message">Send</string>
     <string name="destroy_message">I am dead!</string>
     <string name="create_message">I am created!</string>
+    <string name="select_image">Select image</string>
     <string name="new_message_notify">New Message</string>
-    <string name="channel_description">Description notification message channel</string>
+    <string name="channel_description">News Messages TaSOS</string>
+    <string name="channel_name">Notification TaSOS</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="default_notification_channel_id" translatable="false">com.globalhiddenodds.tasos.news</string>
 </resources>
