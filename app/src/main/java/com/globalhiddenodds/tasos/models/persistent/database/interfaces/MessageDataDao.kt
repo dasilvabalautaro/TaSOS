@@ -23,6 +23,9 @@ interface MessageDataDao {
     @Query("DELETE FROM messageData")
     fun deleteAll()
 
+    @Query("DELETE FROM messageData WHERE source LIKE :source")
+    fun delete(source: String)
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(messageData: MessageData)
 

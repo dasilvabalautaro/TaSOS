@@ -13,6 +13,7 @@ import com.globalhiddenodds.tasos.models.persistent.network.ListenFCM
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.view.fragments.WebFragment
 import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.Variables
 import javax.inject.Inject
 
 class WebActivity: BaseActivity() {
@@ -54,8 +55,8 @@ class WebActivity: BaseActivity() {
         val address = Constants.web_rtc + "?" + "source=" + src +
                 "&target=" + tgt
 
-        listenFCM.listenFromFCM(Constants.user.id,
-                Constants.user.token, functionFCM)
+        listenFCM.listenFromFCM(src,
+                Variables.tokenTarget, functionFCM)
         openWebPage(address)
 
     }

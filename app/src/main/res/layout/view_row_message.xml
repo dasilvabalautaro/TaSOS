@@ -62,7 +62,7 @@
             android:background="@drawable/bkg_msg_source"
             android:textStyle="italic"
             android:textSize="20sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
             app:layout_constraintTop_toTopOf="@+id/top_guideline"/>
 

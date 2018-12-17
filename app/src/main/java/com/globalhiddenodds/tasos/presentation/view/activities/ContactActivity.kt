@@ -9,8 +9,10 @@ import android.view.View
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.di.ApplicationComponent
+import com.globalhiddenodds.tasos.extension.viewModel
 import com.globalhiddenodds.tasos.models.persistent.network.services.ManagerServices
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
+import com.globalhiddenodds.tasos.presentation.presenter.DeleteUserViewModel
 import com.globalhiddenodds.tasos.presentation.view.fragments.ContactFragment
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
@@ -21,10 +23,12 @@ class ContactActivity: BaseActivity() {
         (application as App).appComponent
     }
 
+
     companion object {
 
         fun callingIntent(context: Context) = Intent(context,
                 ContactActivity::class.java)
+
     }
 
     @Inject
@@ -46,7 +50,6 @@ class ContactActivity: BaseActivity() {
         managerServices.start()
 
     }
-
 
 /*
     override fun onStart() {

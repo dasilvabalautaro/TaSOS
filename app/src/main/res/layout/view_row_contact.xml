@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/right_one_guideline"
-            card_view:layout_constraintGuide_percent=".80"
+            card_view:layout_constraintGuide_percent=".65"
             android:orientation="vertical"/>
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
@@ -86,14 +86,16 @@
             card_view:layout_constraintTop_toTopOf="@+id/tv_name"
             card_view:layout_constraintLeft_toLeftOf="@+id/right_one_guideline"/>
 
-        <!--<ImageView
+        <ImageButton
             android:layout_width="0dp"
+            android:id="@+id/ib_trash_user"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_detail"
+            android:src="@drawable/ic_trash"
+            android:background="@null"
             android:contentDescription="@string/lbl_description_image"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_alert"
             card_view:layout_constraintLeft_toLeftOf="@+id/right_two_guideline"
-            card_view:layout_constraintTop_toTopOf="@+id/top_guideline"
-            card_view:layout_constraintRight_toRightOf="@+id/right_guideline"/>-->
+            card_view:layout_constraintRight_toRightOf="@+id/right_guideline"/>
 
     </android.support.constraint.ConstraintLayout>
 

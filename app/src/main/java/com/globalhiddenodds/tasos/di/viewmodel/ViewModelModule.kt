@@ -63,5 +63,11 @@ abstract class ViewModelModule {
     abstract fun bindsLiveDataMessageContactViewModel(liveDataMessageContactViewModel:
                                                           LiveDataMessageContactViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(DeleteUserViewModel::class)
+    abstract fun bindsDeleteUserViewModel(deleteUserViewModel:
+                                              DeleteUserViewModel): ViewModel
+
 
 }

@@ -4,7 +4,6 @@ package com.globalhiddenodds.tasos.presentation.view.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.StringRes
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.globalhiddenodds.tasos.R
@@ -20,13 +19,22 @@ import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.*
 import com.globalhiddenodds.tasos.tools.Constants
-import kotlinx.android.synthetic.main.view_row_contact.*
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
 import javax.inject.Inject
 
 class ContactFragment: BaseFragment() {
+    companion object {
+        private lateinit var deleteUserViewModel: DeleteUserViewModel
+        fun deleteUser(user: String){
+
+            deleteUserViewModel.source = user
+            deleteUserViewModel.deleteUser()
+        }
+
+    }
+
     @Inject
     lateinit var navigator: Navigator
     @Inject
@@ -38,6 +46,7 @@ class ContactFragment: BaseFragment() {
     private lateinit var searchContactViewModel: SearchContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
     private lateinit var liveDataContactsViewModel: LiveDataContactsViewModel
+
 
     private var idTarget = ""
 
@@ -59,6 +68,12 @@ class ContactFragment: BaseFragment() {
             observe(result, ::resultLiveDataContact)
             failure(failure, ::handleFailure)
         }
+
+        deleteUserViewModel = viewModel(viewModelFactory) {
+            observe(result, ::resultMessage)
+            failure(failure, ::handleFailure)
+        }
+
 
     }
 

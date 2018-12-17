@@ -37,6 +37,7 @@ class EnablePermissions @Inject constructor(private val permissionUtils:
                 activity,
                 allPermissionRequest,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS)
@@ -71,6 +72,19 @@ class EnablePermissions @Inject constructor(private val permissionUtils:
                     .requestPermission(activity,
                             recordAudio,
                             Manifest.permission.RECORD_AUDIO)
+            else -> return true
+        }
+        return false
+    }
+
+    fun permissionWriteExternalStorage(activity: Activity): Boolean{
+        when {
+            ContextCompat.checkSelfPermission(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED -> permissionUtils
+                    .requestPermission(activity,
+                            writeExternalStorage,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
             else -> return true
         }
         return false

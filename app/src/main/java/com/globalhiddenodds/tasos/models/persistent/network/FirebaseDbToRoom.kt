@@ -7,6 +7,7 @@ import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository
 import com.globalhiddenodds.tasos.presentation.component.Notify
 import com.globalhiddenodds.tasos.presentation.data.MessageView
 import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.Variables
 import com.google.firebase.database.*
 import java.util.HashMap
 import javax.inject.Inject
@@ -118,6 +119,22 @@ class FirebaseDbToRoom @Inject constructor(private val saveMessageUseCase:
                 .child(Constants.user.id)
                 .child(constTarget).setValue("")
 
+    }
+
+    fun getTokenUser(userId: String){
+        referenceRoot!!.child(rootUser)
+            .child(userId)
+            .child("token")
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    Variables.tokenTarget = dataSnapshot.value.toString()
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Variables.tokenTarget  = ""
+                    showLog("loadPost:onCancelled: " + databaseError.toException())
+                }
+            })
     }
 
     fun clearValueFieldFirebase(field: String){

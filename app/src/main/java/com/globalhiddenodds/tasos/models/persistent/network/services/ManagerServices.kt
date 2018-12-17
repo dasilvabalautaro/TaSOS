@@ -17,8 +17,9 @@ class ManagerServices @Inject constructor(private val context: Context) {
     fun start() {
         val prefs = PreferenceRepository.customPrefs(context,
                 Constants.preference_tasos)
-        Constants.user.id = prefs.getString(Constants.userId, "")
-
+        if (Constants.user.id.isEmpty()){
+            Constants.user.id = prefs.getString(Constants.userId, "")
+        }
 
         if (!checkServiceRunning() && Constants.user.id.isNotEmpty()){
             context.startService(serviceMessageIntent)

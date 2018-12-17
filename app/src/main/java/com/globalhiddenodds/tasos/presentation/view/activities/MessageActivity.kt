@@ -3,12 +3,14 @@ package com.globalhiddenodds.tasos.presentation.view.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.di.ApplicationComponent
+import com.globalhiddenodds.tasos.models.persistent.network.FirebaseDbToRoom
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
@@ -37,12 +39,14 @@ class MessageActivity: BaseActivity() {
     @Inject
     lateinit var navigator: Navigator
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appComponent.inject(this)
         this.tv_name.visibility = View.VISIBLE
         this.et_search.layoutParams.width = 0
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
         //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 

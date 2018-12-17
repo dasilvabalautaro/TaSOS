@@ -1,5 +1,8 @@
 package com.globalhiddenodds.tasos.models.persistent.network
 
+import android.content.Context
+import android.widget.Toast
+import com.globalhiddenodds.tasos.R
 import com.google.firebase.functions.FirebaseFunctions
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,7 +12,7 @@ import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.functions.HttpsCallableResult
 
 @Singleton
-class ListenFCM @Inject constructor() {
+class ListenFCM @Inject constructor(private val context: Context) {
 
     private var firebaseFunctions: FirebaseFunctions? = null
 
@@ -41,6 +44,7 @@ class ListenFCM @Inject constructor() {
             .addOnCompleteListener { task: Task<String> ->
                 if (task.isSuccessful){
                     task.result
+
                     println(task.result.toString())
                 }else{
                     if (task.exception is FirebaseFunctionsException ){

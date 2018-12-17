@@ -7,6 +7,7 @@ import android.os.IBinder
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.di.ApplicationComponent
 import com.globalhiddenodds.tasos.models.persistent.network.FirebaseDbToRoom
+import com.globalhiddenodds.tasos.tools.Chronometer
 import javax.inject.Inject
 
 class HearMessageService : Service() {
@@ -19,7 +20,8 @@ class HearMessageService : Service() {
 
     @Inject
     lateinit var firebaseDbToRoom: FirebaseDbToRoom
-
+    @Inject
+    lateinit var chronometer: Chronometer
 
     inner class LocalBinder: Binder(){
         fun getService(): HearMessageService?{
@@ -35,6 +37,8 @@ class HearMessageService : Service() {
         super.onCreate()
         appComponent.inject(this)
         firebaseDbToRoom.startFirebase()
+        chronometer.reset()
+        chronometer.start()
         showLog("onCreate")
     }
 

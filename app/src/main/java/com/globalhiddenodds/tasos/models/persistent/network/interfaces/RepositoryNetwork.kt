@@ -4,7 +4,9 @@ import com.globalhiddenodds.tasos.domain.functional.Either
 import com.globalhiddenodds.tasos.models.data.User
 import com.globalhiddenodds.tasos.models.data.UserCloud
 import com.globalhiddenodds.tasos.models.exception.Failure
+import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository
 import com.globalhiddenodds.tasos.models.persistent.network.RegisterTokenFCM
+import com.globalhiddenodds.tasos.tools.Constants
 import com.globalhiddenodds.tasos.tools.NetworkHandler
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -46,12 +48,15 @@ interface RepositoryNetwork {
 
             return if(currentUser != null){
                 if (!currentUser.displayName.isNullOrEmpty()){
-                    user.id  = currentUser.displayName!!
-                }else{
+                    Constants.user.id  = currentUser.displayName!!
+                }else if (user.id.isNotEmpty()){
+                    Constants.user.id = user.id
                     update(currentUser, user.id)
                 }
 
-                GlobalScope.launch { registerTokenFCM.getTokenFCM() }
+                if (Constants.user.id.isNotEmpty()){
+                    GlobalScope.launch { registerTokenFCM.getTokenFCM() }
+                }
 
                /* currentUser.getIdToken(true).addOnSuccessListener {
                     if (it.token != null){
@@ -121,6 +126,7 @@ interface RepositoryNetwork {
 
             this.auth!!.signInWithEmailAndPassword(user.email,
                     user.password).addOnCompleteListener { task: Task<AuthResult> ->
+
                 if (!task.isSuccessful) {
                     Either.Left(Failure.ServerError())
                 }

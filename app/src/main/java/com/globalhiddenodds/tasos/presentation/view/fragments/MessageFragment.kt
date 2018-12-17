@@ -9,6 +9,8 @@ import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
+import com.globalhiddenodds.tasos.models.persistent.files.ManageFiles
+import com.globalhiddenodds.tasos.models.persistent.network.FirebaseDbToRoom
 import com.globalhiddenodds.tasos.presentation.component.MessageAdapter
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.data.MessageView
@@ -18,7 +20,9 @@ import com.globalhiddenodds.tasos.presentation.presenter.LiveDataMessageContactV
 import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
 import com.globalhiddenodds.tasos.presentation.presenter.UpdateStateMessageViewModel
 import com.globalhiddenodds.tasos.presentation.view.activities.MessageActivity
+import com.globalhiddenodds.tasos.tools.Chronometer
 import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.EnablePermissions
 import com.globalhiddenodds.tasos.tools.Variables
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_message.*
@@ -43,10 +47,17 @@ class MessageFragment: BaseFragment() {
 
     @Inject
     lateinit var messageAdapter: MessageAdapter
+    @Inject
+    lateinit var firebaseDbToRoom: FirebaseDbToRoom
+    @Inject
+    lateinit var chronometer: Chronometer
+    @Inject
+    lateinit var enablePermissions: EnablePermissions
+
     private lateinit var liveDataMessageContactViewModel: LiveDataMessageContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
     private lateinit var updateStateMessageViewModel: UpdateStateMessageViewModel
-
+    private var flagChronometer = false
     override fun layoutId() = R.layout.view_message
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +91,7 @@ class MessageFragment: BaseFragment() {
         }
 
         ib_send.setOnClickListener { executeSend() }
+
     }
 
     override fun onResume() {
@@ -88,6 +100,10 @@ class MessageFragment: BaseFragment() {
                 as GroupMessageView).source
         (arguments!!.get(paramGroup)
                 as GroupMessageView).quantity = 0
+        GlobalScope.launch {
+            firebaseDbToRoom.getTokenUser((arguments!!.get(paramGroup)
+                    as GroupMessageView).source)
+        }
     }
 
     override fun onPause() {
@@ -97,6 +113,13 @@ class MessageFragment: BaseFragment() {
                     as GroupMessageView).source
             updateStateMessageViewModel.updateStateMessages()
 
+        }
+        if (flagChronometer){
+            flagChronometer = false
+
+            GlobalScope.launch {
+                chronometer.resetDataML(1)
+            }
         }
     }
 
@@ -127,6 +150,15 @@ class MessageFragment: BaseFragment() {
         if (!msg.isEmpty()){
             sendMessage(msg)
             et_send.text.clear()
+            GlobalScope.launch{
+                if (!flagChronometer && enablePermissions
+                                .permissionWriteExternalStorage(activity!!)){
+                    flagChronometer = true
+
+                    chronometer.resetDataML(0)
+
+                }
+            }
 
             //hideKeyboard(activity as BaseActivity)
         }
@@ -169,7 +201,7 @@ class MessageFragment: BaseFragment() {
                                 println(ex.message)
                             }
 
-                        }, 1000)
+                        }, 500)
 
                     }
 

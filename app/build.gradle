@@ -77,6 +77,7 @@ dependencies {
     implementation applicationDependencies.rxandroid
     implementation applicationDependencies.anko
     implementation applicationDependencies.room
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //Unit/Integration tests dependencies
     testImplementation unitTestDependencies.kotlin
@@ -97,12 +98,11 @@ dependencies {
     debugImplementation developmentDependencies.leakCanary
     releaseImplementation developmentDependencies.leakCanaryNoop
     testImplementation developmentDependencies.leakCanaryNoop
+
 }
 
-/*kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}*/
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
