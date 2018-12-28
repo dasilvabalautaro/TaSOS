@@ -20,7 +20,7 @@ import javax.inject.Inject
 class ContactActivity: BaseActivity() {
     private val appComponent: ApplicationComponent by
     lazy(mode = LazyThreadSafetyMode.NONE) {
-        (application as App).appComponent
+        (application as App).component
     }
 
 
@@ -75,6 +75,7 @@ class ContactActivity: BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         menu!!.findItem(R.id.action_video).isVisible = false
+        menu.findItem(R.id.action_call).isVisible = false
         return true
 
     }

@@ -11,7 +11,11 @@ import javax.inject.Inject
 
 class App: Application() {
 
-    val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {
+    companion object{
+        lateinit var appComponent: ApplicationComponent
+    }
+
+    val component: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {
         DaggerApplicationComponent
                 .builder()
                 .applicationModule(ApplicationModule(this))
@@ -28,10 +32,14 @@ class App: Application() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(appLifecycleObserver)
     }
 
-    private fun injectMembers() = appComponent.inject(this)
+    private fun injectMembers() = component.inject(this)
 
     private fun initializeLeakDetection() {
         if (BuildConfig.DEBUG) LeakCanary.install(this)
     }
 
+    fun getAppComponent(): ApplicationComponent{
+        appComponent = component
+        return appComponent
+    }
 }

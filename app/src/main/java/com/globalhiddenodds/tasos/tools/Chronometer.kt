@@ -30,8 +30,8 @@ class Chronometer @Inject constructor(private val managerFiles:
     fun resetDataML(state: Int){
         val elapse = stop()
         val day = numericalDay()
-        val data = Variables.timeElapsed.toString() + "," +
-                elapse.toString() + "," + day.toString() + "," + state.toString()
+        val data = day.toString() + "," + Variables.timeElapsed.toString() + "," +
+                 state.toString()
         managerFiles.writeFile(managerFiles.fileNameML, data)
         reset()
         start()

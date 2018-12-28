@@ -1,21 +1,26 @@
 package com.globalhiddenodds.tasos.presentation.view.activities
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.AttributeSet
+import android.support.v4.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.di.ApplicationComponent
-import com.globalhiddenodds.tasos.models.persistent.network.FirebaseDbToRoom
+import com.globalhiddenodds.tasos.models.persistent.files.ManageFiles
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.view.fragments.MessageFragment
 import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.EnablePermissions
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
@@ -31,14 +36,24 @@ class MessageActivity: BaseActivity() {
         }
 
     }
+
+    var image: Bitmap? = null
+    var observableImage: Subject<Bitmap> = PublishSubject.create()
+
     private val appComponent: ApplicationComponent by
     lazy(mode = LazyThreadSafetyMode.NONE) {
-        (application as App).appComponent
+        (application as App).component
     }
 
     @Inject
     lateinit var navigator: Navigator
+    @Inject
+    lateinit var enablePermissions: EnablePermissions
+    @Inject
+    lateinit var manageFiles: ManageFiles
 
+    private val audio = "Audio"
+    private val video = "Video"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +61,6 @@ class MessageActivity: BaseActivity() {
         this.tv_name.visibility = View.VISIBLE
         this.et_search.layoutParams.width = 0
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
         //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
@@ -54,6 +68,7 @@ class MessageActivity: BaseActivity() {
         menuInflater.inflate(R.menu.main, menu)
         menu!!.findItem(R.id.action_search).isVisible = false
         menu.findItem(R.id.action_video).isVisible = true
+        menu.findItem(R.id.action_call).isVisible = true
         return true
 
     }
@@ -62,16 +77,61 @@ class MessageActivity: BaseActivity() {
         val id = item!!.itemId
 
         if (id == R.id.action_video){
+            val address = Constants.web_rtc
             navigator.showWeb(this, Constants.user.id,
-                    tv_name.text.toString())
+                    tv_name.text.toString(), address, video)
+
+        }
+
+        if (id == R.id.action_call){
+            val address = Constants.audio_rtc
+            navigator.showWeb(this, Constants.user.id,
+                    tv_name.text.toString(), address, audio)
 
         }
 
         return super.onOptionsItemSelected(item)
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == enablePermissions.galleryImageRequest &&
+                resultCode == Activity.RESULT_OK && data != null) {
+            this.image = manageFiles.getBitmap(data.data)
+            if (this.image != null){
+                this.observableImage.onNext(this.image!!)
+            }
+
+        } else if (requestCode == enablePermissions.cameraImageRequest &&
+                resultCode == Activity.RESULT_OK) {
+
+            val photoUri = FileProvider.getUriForFile(this,
+                    applicationContext.packageName +
+                            ".provider", enablePermissions
+                    .getCameraFile())
+            this.image = manageFiles.getBitmap(photoUri)
+            if (this.image != null){
+                this.observableImage.onNext(this.image!!)
+            }
+
+        }
+
+    }
+
+
     override fun fragment() = MessageFragment
             .forGroup(intent.getParcelableExtra(INTENT_EXTRA_PARAM_GROUP))
+
+    fun gallery(){
+        enablePermissions.startGalleryChooser(this)
+    }
+
+    fun camera(){
+
+        enablePermissions.startCamera(this)
+    }
 
    /* private inline fun <reified T : Activity> Activity.navigate() {
         val intent = Intent(this@MessageActivity, T::class.java)

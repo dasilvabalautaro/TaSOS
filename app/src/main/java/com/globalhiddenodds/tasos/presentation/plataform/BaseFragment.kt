@@ -4,7 +4,6 @@ package com.globalhiddenodds.tasos.presentation.plataform
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
-import android.hardware.input.InputManager
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
@@ -26,14 +25,13 @@ import com.globalhiddenodds.tasos.models.exception.Failure
 import io.reactivex.disposables.CompositeDisposable
 
 import javax.inject.Inject
-import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
 
 
 
 abstract class BaseFragment: Fragment() {
     abstract fun layoutId(): Int
     val appComponent: ApplicationComponent by lazy(mode = LazyThreadSafetyMode.NONE) {
-        (activity?.application as App).appComponent
+        (activity?.application as App).component
     }
 
     @Inject

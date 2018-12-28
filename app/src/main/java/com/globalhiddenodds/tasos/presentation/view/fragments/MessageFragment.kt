@@ -1,5 +1,6 @@
 package com.globalhiddenodds.tasos.presentation.view.fragments
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.StringRes
@@ -14,7 +15,6 @@ import com.globalhiddenodds.tasos.models.persistent.network.FirebaseDbToRoom
 import com.globalhiddenodds.tasos.presentation.component.MessageAdapter
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.data.MessageView
-import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.LiveDataMessageContactViewModel
 import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
@@ -24,6 +24,7 @@ import com.globalhiddenodds.tasos.tools.Chronometer
 import com.globalhiddenodds.tasos.tools.Constants
 import com.globalhiddenodds.tasos.tools.EnablePermissions
 import com.globalhiddenodds.tasos.tools.Variables
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_message.*
 import kotlinx.coroutines.GlobalScope
@@ -53,11 +54,15 @@ class MessageFragment: BaseFragment() {
     lateinit var chronometer: Chronometer
     @Inject
     lateinit var enablePermissions: EnablePermissions
+    @Inject
+    lateinit var manageFiles: ManageFiles
 
     private lateinit var liveDataMessageContactViewModel: LiveDataMessageContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
     private lateinit var updateStateMessageViewModel: UpdateStateMessageViewModel
     private var flagChronometer = false
+    private val typeImage = 2
+
     override fun layoutId() = R.layout.view_message
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +87,21 @@ class MessageFragment: BaseFragment() {
             failure(failure, ::handleFailure)
         }
 
+        val image = (activity as MessageActivity).observableImage.map { i -> i }
+        disposable.add(image.observeOn(Schedulers.newThread())
+                .map { i ->
+                    kotlin.run {
+                        return@map Bitmap.createScaledBitmap(i,
+                                (i.width*0.2).toInt(),
+                                (i.height*0.2).toInt(), true)
+                    }
+                }  //.observeOn(AndroidSchedulers.mainThread())
+                .subscribe { resize ->
+                    kotlin.run {
+                        val msg = manageFiles.base641EncodedImage(resize)
+                        sendMessage(msg, typeImage)
+                    }
+                })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,7 +111,11 @@ class MessageFragment: BaseFragment() {
         }
 
         ib_send.setOnClickListener { executeSend() }
-
+        ib_image.setOnClickListener { (activity as MessageActivity).gallery() }
+        ib_camera.setOnClickListener { (activity as MessageActivity).camera() }
+        /*val imeManager = appComponent.context()
+                .getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imeManager.showInputMethodPicker()*/
     }
 
     override fun onResume() {
@@ -133,13 +157,13 @@ class MessageFragment: BaseFragment() {
     }
 
 
-    private fun sendMessage(msg: String){
+    private fun sendMessage(msg: String, type: Int = 0){
         val target = (arguments!!.get(paramGroup)
                 as GroupMessageView).source
         val map = mapOf("idTarget" to target,
                 "message" to msg,
                 "state" to 1, "source" to Constants.user.id,
-                "type" to 0, "target" to target)
+                "type" to type, "target" to target)
         sendMessageViewModel.map = map
         sendMessageViewModel.sendMessage()
 
@@ -164,7 +188,6 @@ class MessageFragment: BaseFragment() {
         }
     }
 
-
     private fun resultSendMessage(value: Boolean?){
         if (value != null && value){
 
@@ -187,11 +210,11 @@ class MessageFragment: BaseFragment() {
 
             GlobalScope.launch {
                 messageAdapter.setObjectList(list as ArrayList<MessageView>)
-                messageAdapter.notifyDataSetChanged()
+
                 try {
                     activity!!.runOnUiThread {
                         //rv_messages!!.refreshDrawableState()
-
+                        messageAdapter.notifyDataSetChanged()
                         Handler().postDelayed({
                             try {
                                 rv_messages!!.scrollToPosition(messageAdapter.collection.count() - 1)

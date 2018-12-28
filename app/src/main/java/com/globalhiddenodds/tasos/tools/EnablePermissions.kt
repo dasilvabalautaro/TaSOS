@@ -2,7 +2,9 @@ package com.globalhiddenodds.tasos.tools
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Environment
 import android.provider.MediaStore
@@ -11,22 +13,24 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import com.globalhiddenodds.tasos.R
 import java.io.File
+import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class EnablePermissions @Inject constructor(private val permissionUtils:
-                                            PermissionUtils):
+                                            PermissionUtils,
+                                            private val context: Context):
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     private val imageFile = "temp.jpg"
     private val cameraPermissionsRequest = 0
-    private val cameraImageRequest = 1
+    val cameraImageRequest = 1
     private val galleryPermissionsRequest = 2
     private val writeExternalStorage = 3
     private val readExternalStorage = 4
-    private val galleryImageRequest = 5
+    val galleryImageRequest = 5
     private val audioSettings = 6
     private val recordAudio = 7
     private val allPermissionRequest = 8
@@ -90,6 +94,19 @@ class EnablePermissions @Inject constructor(private val permissionUtils:
         return false
     }
 
+    fun permissionReadExternalStorage(activity: Activity): Boolean{
+        when {
+            ContextCompat.checkSelfPermission(activity,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED -> permissionUtils
+                    .requestPermission(activity,
+                            readExternalStorage,
+                            Manifest.permission.READ_EXTERNAL_STORAGE)
+            else -> return true
+        }
+        return false
+    }
+
     fun startCamera(activity: Activity) {
         if (permissionUtils.requestPermission(
                         activity,
@@ -97,18 +114,29 @@ class EnablePermissions @Inject constructor(private val permissionUtils:
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val photoUri = FileProvider.getUriForFile(activity,
-                    activity.applicationContext.packageName
-                            + ".provider", getCameraFile(activity))
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            activity.startActivityForResult(intent, cameraImageRequest)
+
+            try {
+                val photoUri = FileProvider.getUriForFile(context,
+                        context.applicationContext.packageName
+                                + ".provider", getCameraFile())
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                activity.startActivityForResult(intent, cameraImageRequest)
+
+            }catch (ex: Exception){
+                println("Error get image: " + ex.message)
+            }
+
 
         }
     }
 
-    private fun getCameraFile(activity: Activity): File {
-        val dir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    fun getCameraFile(): File {
+        val dir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        if (!dir.exists()) {
+            dir.mkdirs()
+            println("Directory not created")
+        }
         return File(dir, imageFile)
     }
 
@@ -124,6 +152,7 @@ class EnablePermissions @Inject constructor(private val permissionUtils:
                     galleryImageRequest)
         }
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<out String>,

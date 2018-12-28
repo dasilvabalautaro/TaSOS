@@ -7,6 +7,7 @@ import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
+import com.globalhiddenodds.tasos.models.machineLearning.MLMessageSequence
 import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository
 import com.globalhiddenodds.tasos.models.persistent.PreferenceRepository.set
 import com.globalhiddenodds.tasos.models.persistent.network.interfaces.RepositoryNetwork
@@ -26,6 +27,7 @@ class LoginFragment: BaseFragment() {
     lateinit var navigator: Navigator
     @Inject
     lateinit var repositoryNetwork: RepositoryNetwork
+
 
     private lateinit var createUserViewModel: CreateUserViewModel
     private lateinit var createUserDBViewModel: CreateUserDBViewModel

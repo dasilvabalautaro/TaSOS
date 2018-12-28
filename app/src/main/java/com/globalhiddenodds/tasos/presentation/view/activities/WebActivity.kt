@@ -20,12 +20,16 @@ class WebActivity: BaseActivity() {
     companion object {
         const val source = "source"
         const val target = "target"
+        const val address = "address"
+        const val type = "type"
 
         fun callingIntent(context: Context, source:String,
-                          target: String): Intent {
+                          target: String, address: String, type: String): Intent {
             val intent = Intent(context, WebActivity::class.java)
             intent.putExtra(WebActivity.source, source)
             intent.putExtra(WebActivity.target, target)
+            intent.putExtra(WebActivity.address, address)
+            intent.putExtra(WebActivity.type, type)
             return intent
         }
     }
@@ -34,7 +38,7 @@ class WebActivity: BaseActivity() {
 
     private val appComponent: ApplicationComponent by
     lazy(mode = LazyThreadSafetyMode.NONE) {
-        (application as App).appComponent
+        (application as App).component
     }
 
     @Inject
@@ -52,12 +56,13 @@ class WebActivity: BaseActivity() {
         val src = intent.getStringExtra(source)
         val tgt = intent.getStringExtra(target)
 
-        val address = Constants.web_rtc + "?" + "source=" + src +
+        val url = intent.getStringExtra(address) + "?" + "source=" + src +
                 "&target=" + tgt
+        val typ = intent.getStringExtra(type)
 
         listenFCM.listenFromFCM(src,
-                Variables.tokenTarget, functionFCM)
-        openWebPage(address)
+                Variables.tokenTarget, typ, functionFCM)
+        openWebPage(url)
 
     }
 

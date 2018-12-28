@@ -16,6 +16,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission tools:ignore="ProtectedPermissions"
         android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
+
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front.autofocus"
+        android:required="false" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -52,7 +60,8 @@
         <activity android:name=".presentation.view.activities.ContactActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".presentation.view.activities.MessageActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"/>
         <activity android:name=".presentation.view.activities.WebActivity">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
@@ -72,7 +81,15 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
         <!--  <receiver
               android:name=".models.persistent.network.services.HearMessageRestartBroadcastReceiver"
               android:enabled="true"

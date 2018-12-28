@@ -16,7 +16,9 @@
     <string name="failure_input">Input Error</string>
     <string name="lbl_search">Search Contact</string>
     <string name="lbl_video">Video Chat</string>
+    <string name="lbl_call">Call</string>
     <string name="lbl_video_foreground">Video Chat, press button camera and answer.</string>
+    <string name="lbl_audio_foreground">Audio Chat, press button audio and answer.</string>
     <string name="msg_search_process">Search in process</string>
     <string name="lbl_configuration">Configuration</string>
     <string name="action_message">Message send OK</string>
@@ -33,6 +35,8 @@
     <string name="new_message_notify">New Message</string>
     <string name="channel_description">News Messages TaSOS</string>
     <string name="channel_name">Notification TaSOS</string>
+    <string name="select_photo">Select a photo</string>
+    <string name="value_null">Cannot transform a null value</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
     <string name="default_notification_channel_id" translatable="false">com.globalhiddenodds.tasos.news</string>
 </resources>

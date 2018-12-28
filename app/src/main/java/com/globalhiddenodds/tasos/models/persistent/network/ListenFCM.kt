@@ -22,12 +22,12 @@ class ListenFCM @Inject constructor(private val context: Context) {
         }
     }
 
-    private fun addListen(user_id: String, token: String, nameFunction: String):
+    private fun addListen(user_id: String, token: String, type: String, nameFunction: String):
             Task<String> {
         val data = mutableMapOf<String, Any?>()
         data["user_id"] = user_id as Any
         data["token"] = token
-
+        data["type"] = type
         return firebaseFunctions!!
                 .getHttpsCallable(nameFunction)
                 .call(data)
@@ -39,8 +39,9 @@ class ListenFCM @Inject constructor(private val context: Context) {
                 })
     }
 
-    fun listenFromFCM(user_id: String, token: String, nameFunction: String){
-        addListen(user_id, token, nameFunction)
+    fun listenFromFCM(user_id: String, token: String, type: String,
+                      nameFunction: String){
+        addListen(user_id, token, type, nameFunction)
             .addOnCompleteListener { task: Task<String> ->
                 if (task.isSuccessful){
                     task.result

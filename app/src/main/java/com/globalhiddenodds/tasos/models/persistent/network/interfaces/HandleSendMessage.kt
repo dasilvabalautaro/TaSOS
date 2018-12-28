@@ -55,7 +55,7 @@ interface HandleSendMessage {
                             "users/$idTarget/$fieldTarget" to target)
 
                     this.referenceRoot!!.updateChildren(values)
-                    if(type == 0){
+                    if(type == 0 || type == 2){
                         //Change source for target in database
                         saveDbMessage(target as String, source as String,
                                 message as String, type as Int, state as Int)

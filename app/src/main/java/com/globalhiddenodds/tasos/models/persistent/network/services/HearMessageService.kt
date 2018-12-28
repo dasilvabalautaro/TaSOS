@@ -15,7 +15,7 @@ class HearMessageService : Service() {
 
     private val appComponent: ApplicationComponent by
     lazy(mode = LazyThreadSafetyMode.NONE) {
-        (application as App).appComponent
+        (application as App).component
     }
 
     @Inject

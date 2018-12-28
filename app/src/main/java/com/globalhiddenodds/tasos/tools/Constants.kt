@@ -8,4 +8,5 @@ object Constants {
     const val userId = "user_id"
     const val run = "run"
     const val web_rtc = "https://webrtchermes.firebaseapp.com/"
+    const val audio_rtc = "https://webrtchermes.firebaseapp.com/audio/"
 }

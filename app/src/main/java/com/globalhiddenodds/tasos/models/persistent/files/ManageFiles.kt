@@ -1,6 +1,12 @@
 package com.globalhiddenodds.tasos.models.persistent.files
 
+import android.content.Context
+import android.graphics.*
+import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
+import android.util.Base64
+import com.globalhiddenodds.tasos.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -8,11 +14,13 @@ import java.io.*
 import javax.inject.Singleton
 
 @Singleton
-class ManageFiles @Inject constructor() {
+class ManageFiles @Inject constructor(private val context: Context) {
     private val directoryWork = "tasos"
-    val fileNameML = "dataml.txt"
+    private val quality = 100
+    val fileNameML: String
+        get() = "dataml.txt"
 
-    private fun getAlbumStorageDir(): File {
+    fun getAlbumStorageDir(): File {
         val file = File(Environment.getExternalStorageDirectory(), directoryWork)
         if (!file.exists()) {
             file.mkdirs()
@@ -47,7 +55,8 @@ class ManageFiles @Inject constructor() {
             val stringBuilder = StringBuilder()
             var lineTxt = bufferedReader.readLine()
             while (!lineTxt.isNullOrEmpty()) {
-                stringBuilder.append(lineTxt)
+                //stringBuilder.append(lineTxt)
+                stringBuilder.appendln(lineTxt)
                 lineTxt = bufferedReader.readLine()
             }
 
@@ -61,6 +70,61 @@ class ManageFiles @Inject constructor() {
         return null
 
     }
+
+    private fun scaleBitmapDown(bitmap: Bitmap): Bitmap {
+
+        val newWidth = bitmap.width/2
+        val newHeight = bitmap.height/(bitmap.width/newWidth)
+        val newBitmap = Bitmap.createBitmap(newWidth,
+                newHeight, Bitmap.Config.ARGB_8888)
+
+        val ratioX = newWidth / bitmap.width.toFloat()
+        val ratioY = newHeight / bitmap.height.toFloat()
+        val middleX = newWidth / 2.0f
+        val middleY = newHeight / 2.0f
+
+        val scaleMatrix = Matrix()
+        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY)
+
+        val c = Canvas(newBitmap)
+        c.matrix = scaleMatrix
+        c.drawBitmap(bitmap, middleX - bitmap.width / 2,
+                middleY - bitmap.height / 2, Paint(Paint.FILTER_BITMAP_FLAG))
+        return newBitmap
+    }
+
+    fun getBitmap(uri: Uri?): Bitmap? {
+        when {
+            uri != null -> return try {
+                scaleBitmapDown(
+                        MediaStore.Images.Media
+                                .getBitmap(context.contentResolver, uri))
+
+            } catch (e: IOException) {
+                println(e.message)
+                null
+            }
+            else -> {
+                println(R.string.value_null)
+                return null
+            }
+
+        }
+    }
+
+    fun base641EncodedImage(bitmap: Bitmap): String{
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+        val imageBytes = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT)
+    }
+
+    fun base64DecodeImage(baseString: String): Bitmap{
+        val decode: ByteArray = Base64.decode(baseString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decode,
+                0, decode.size)
+    }
+
 
 
 }

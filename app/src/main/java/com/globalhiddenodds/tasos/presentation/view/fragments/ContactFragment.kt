@@ -6,11 +6,13 @@ import android.os.Handler
 import android.support.annotation.StringRes
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.WindowManager
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.extension.addDecorationRecycler
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
 import com.globalhiddenodds.tasos.extension.viewModel
+import com.globalhiddenodds.tasos.models.machineLearning.MLMessageSequence
 import com.globalhiddenodds.tasos.presentation.component.ContactsAdapter
 import com.globalhiddenodds.tasos.presentation.component.Notify
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
@@ -19,6 +21,9 @@ import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.*
 import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.EnablePermissions
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.yesButton
@@ -41,7 +46,6 @@ class ContactFragment: BaseFragment() {
     lateinit var contactsAdapter: ContactsAdapter
     @Inject
     lateinit var notify: Notify
-
 
     private lateinit var searchContactViewModel: SearchContactViewModel
     private lateinit var sendMessageViewModel: SendMessageViewModel
@@ -80,6 +84,13 @@ class ContactFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         notify.cancelAllNotification()
+        /*if (enablePermissions.permissionReadExternalStorage(activity!!)){
+            GlobalScope.launch {
+                mlMessageSequence.start()
+            }
+
+        }*/
+
         initializeView()
     }
 

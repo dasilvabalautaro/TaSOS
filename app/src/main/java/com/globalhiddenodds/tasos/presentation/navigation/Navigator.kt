@@ -23,8 +23,10 @@ class Navigator @Inject constructor(private val repositoryNetwork: RepositoryNet
     fun showContact(context: Context) = context
             .startActivity(ContactActivity.callingIntent(context))
 
-    fun showWeb(context: Context, source: String, target: String) = context
-            .startActivity(WebActivity.callingIntent(context, source, target))
+    fun showWeb(context: Context, source: String, target: String,
+                address: String, type: String) = context
+            .startActivity(WebActivity.callingIntent(context, source,
+                    target, address, type))
 
     fun showMain(context: Context, user: User) {
         when (repositoryNetwork.getCurrentUser(user)) {

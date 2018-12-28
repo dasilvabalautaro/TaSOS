@@ -15,7 +15,7 @@ class LoginActivity: BaseActivity() {
 
     private val appComponent: ApplicationComponent by
     lazy(mode = LazyThreadSafetyMode.NONE) {
-        (application as App).appComponent
+        (application as App).component
     }
     @Inject
     lateinit var enablePermissions: EnablePermissions
