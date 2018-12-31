@@ -7,6 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import com.globalhiddenodds.tasos.R
+import com.globalhiddenodds.tasos.tools.Variables
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -72,25 +73,31 @@ class ManageFiles @Inject constructor(private val context: Context) {
     }
 
     private fun scaleBitmapDown(bitmap: Bitmap): Bitmap {
+        if (Variables.screenWidth < bitmap.width){
+            val diffRelationSize = Variables.screenWidth.toFloat() / bitmap.width.toFloat()
+            val newWidth = (bitmap.width.toFloat() * diffRelationSize).toInt()
+            val newHeight = (bitmap.height.toFloat() * diffRelationSize).toInt()
+            val newBitmap = Bitmap.createBitmap(newWidth,
+                    newHeight, Bitmap.Config.ARGB_8888)
 
-        val newWidth = bitmap.width/2
-        val newHeight = bitmap.height/(bitmap.width/newWidth)
-        val newBitmap = Bitmap.createBitmap(newWidth,
-                newHeight, Bitmap.Config.ARGB_8888)
+            val ratioX = newWidth / bitmap.width.toFloat()
+            val ratioY = newHeight / bitmap.height.toFloat()
+            val middleX = newWidth / 2.0f
+            val middleY = newHeight / 2.0f
 
-        val ratioX = newWidth / bitmap.width.toFloat()
-        val ratioY = newHeight / bitmap.height.toFloat()
-        val middleX = newWidth / 2.0f
-        val middleY = newHeight / 2.0f
+            val scaleMatrix = Matrix()
+            scaleMatrix.setScale(ratioX, ratioY, middleX, middleY)
 
-        val scaleMatrix = Matrix()
-        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY)
+            val c = Canvas(newBitmap)
+            c.matrix = scaleMatrix
+            c.drawBitmap(bitmap, middleX - bitmap.width/2,
+                    middleY - bitmap.height/2,
+                    Paint(Paint.FILTER_BITMAP_FLAG))
+            return newBitmap
 
-        val c = Canvas(newBitmap)
-        c.matrix = scaleMatrix
-        c.drawBitmap(bitmap, middleX - bitmap.width / 2,
-                middleY - bitmap.height / 2, Paint(Paint.FILTER_BITMAP_FLAG))
-        return newBitmap
+        }else{
+            return bitmap
+        }
     }
 
     fun getBitmap(uri: Uri?): Bitmap? {

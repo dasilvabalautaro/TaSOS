@@ -22,6 +22,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import android.widget.TextView
+import com.globalhiddenodds.tasos.tools.Variables
+import android.text.style.StyleSpan
+
+
 
 
 class MessageAdapter @Inject constructor():
@@ -64,14 +68,34 @@ class MessageAdapter @Inject constructor():
 
             val dateString = SimpleDateFormat("MM/dd")
                     .format(Date(messageView.dateMessage))
+            val builder = SpannableStringBuilder(itemView.tv_message.text)
+            val spans = builder.getSpans(0,
+                    1, ImageSpan::class.java)
+            if (spans.isNotEmpty()){
+                for (i in 0 until spans.size){
+                    builder.removeSpan(spans[i])
+                }
+
+            }
+
+            val builderT = SpannableStringBuilder(itemView.tv_message_target.text)
+            val spansT = builderT.getSpans(0,
+                    1, ImageSpan::class.java)
+            if (spansT.isNotEmpty()){
+                for (i in 0 until spansT.size){
+                    builderT.removeSpan(spansT[i])
+                }
+
+            }
 
             if (messageView.who){
                 itemView.tv_message_target.visibility = View.VISIBLE
                 itemView.tv_date_message_target.visibility = View.VISIBLE
                 itemView.tv_date_message_target.text = dateString
-                if(messageView.type == typeImage){
-                    val bm = base64DecodeImage(messageView.message)
 
+                if(messageView.type == typeImage){
+                    var bm = base64DecodeImage(messageView.message)
+                    bm = verifySize(bm)
                     try {
                         itemView.tv_message_target.text = setImage(bm,
                                 itemView.tv_message_target)
@@ -82,18 +106,21 @@ class MessageAdapter @Inject constructor():
 
 
                 }else{
+
                     itemView.tv_message_target.text = messageView.message
 
                 }
 
                 itemView.tv_message.visibility = View.INVISIBLE
-                itemView.tv_date_message.visibility = View .INVISIBLE
+                itemView.tv_date_message.visibility = View.INVISIBLE
 
             }else{
                 itemView.tv_message.visibility = View.VISIBLE
                 itemView.tv_date_message.visibility = View .VISIBLE
+
                 if(messageView.type == typeImage){
-                    val bm = base64DecodeImage(messageView.message)
+                    var bm = base64DecodeImage(messageView.message)
+                    bm = verifySize(bm)
                     try {
                         itemView.tv_message.text = setImage(bm, itemView.tv_message)
                     }catch (ex: Exception){
@@ -102,6 +129,8 @@ class MessageAdapter @Inject constructor():
 
 
                 }else{
+
+
                     itemView.tv_message.text = messageView.message
                 }
                 itemView.tv_date_message.text = dateString
@@ -116,6 +145,16 @@ class MessageAdapter @Inject constructor():
             }
         }
 
+        private fun verifySize(bitmap: Bitmap): Bitmap{
+            return if (Variables.screenWidth < bitmap.width){
+                val diffRelationSize = Variables.screenWidth.toFloat() / bitmap.width.toFloat()
+                Bitmap.createScaledBitmap(bitmap,
+                        (bitmap.width * diffRelationSize).toInt(),
+                        (bitmap.height * diffRelationSize). toInt(), true)
+            }else{
+                bitmap
+            }
+        }
         private fun base64DecodeImage(baseString: String): Bitmap {
             val decode: ByteArray = Base64.decode(baseString, Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(decode,

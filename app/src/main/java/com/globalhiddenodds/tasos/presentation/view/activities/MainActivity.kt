@@ -2,11 +2,13 @@ package com.globalhiddenodds.tasos.presentation.view.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.di.ApplicationComponent
 import com.globalhiddenodds.tasos.models.persistent.files.ManageFiles
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.tools.Constants
+import com.globalhiddenodds.tasos.tools.Variables
 import javax.inject.Inject
 
 
@@ -24,6 +26,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         appComponent.inject(this)
         navigator.showMain(this, Constants.user)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        Variables.screenWidth = displayMetrics.widthPixels
+        Variables.screenHeight = displayMetrics.heightPixels
 
     }
 

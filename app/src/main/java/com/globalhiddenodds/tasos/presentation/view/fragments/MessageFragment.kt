@@ -92,8 +92,8 @@ class MessageFragment: BaseFragment() {
                 .map { i ->
                     kotlin.run {
                         return@map Bitmap.createScaledBitmap(i,
-                                (i.width*0.2).toInt(),
-                                (i.height*0.2).toInt(), true)
+                                (i.width*0.9).toInt(),
+                                (i.height*0.9).toInt(), true)
                     }
                 }  //.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { resize ->

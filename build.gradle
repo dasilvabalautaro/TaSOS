@@ -12,8 +12,8 @@ buildscript {
     ext.min_sdk = 21
 
     ext.application_id = 'com.globalhiddenodds.tasos'
-    ext.version_name = '15.0'
-    ext.version_code = 15
+    ext.version_name = '16.0'
+    ext.version_code = 16
     ext.test_runner = 'android.support.test.runner.AndroidJUnitRunner'
 
     repositories {
