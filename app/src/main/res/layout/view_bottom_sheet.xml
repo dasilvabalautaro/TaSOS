@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSecondary"
+        android:gravity="center_horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_del_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_10"
+            android:background="@null"
+            android:tooltipText="@string/lbl_delete_all_message"
+            android:src="@drawable/ic_trash_all"
+            android:contentDescription="@string/lbl_description_image"
+            tools:ignore="UnusedAttribute" />
+
+        <ImageButton
+            android:id="@+id/ib_tools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_10"
+            android:background="@null"
+            android:tooltipText="@string/lbl_tools"
+            android:src="@drawable/ic_wrench"
+            android:contentDescription="@string/lbl_description_image"
+            tools:ignore="UnusedAttribute" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

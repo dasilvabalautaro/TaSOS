@@ -1,6 +1,7 @@
 package com.globalhiddenodds.tasos.presentation.view.activities
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,11 +10,17 @@ import android.support.v4.content.FileProvider
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
+import com.github.chrisbanes.photoview.PhotoView
 import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.di.ApplicationComponent
 import com.globalhiddenodds.tasos.models.persistent.files.ManageFiles
+import com.globalhiddenodds.tasos.presentation.component.MenuSheetDialog
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
+import com.globalhiddenodds.tasos.presentation.data.MessageView
+import com.globalhiddenodds.tasos.presentation.interfaces.OptionsMenuSheet
 import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseActivity
 import com.globalhiddenodds.tasos.presentation.view.fragments.MessageFragment
@@ -22,9 +29,21 @@ import com.globalhiddenodds.tasos.tools.EnablePermissions
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.view_row_message.view.*
 import javax.inject.Inject
 
-class MessageActivity: BaseActivity() {
+class MessageActivity: BaseActivity(), OptionsMenuSheet {
+
+    override fun callExecuteOptions(task: Int) {
+        when(task){
+            1 -> {
+                Toast.makeText(this, "Hi", Toast.LENGTH_LONG).show()
+            }
+            2 -> {
+
+            }
+        }
+    }
 
     companion object {
         private const val INTENT_EXTRA_PARAM_GROUP = "com.globalhiddenodds.INTENT_PARAM_GROUP"
@@ -90,6 +109,12 @@ class MessageActivity: BaseActivity() {
 
         }
 
+        if (id == R.id.action_config){
+            val menuSheetDialog = MenuSheetDialog.newInstance()
+            menuSheetDialog.show(supportFragmentManager, "Bottom Sheet")
+
+        }
+
         return super.onOptionsItemSelected(item)
 
     }
@@ -133,12 +158,15 @@ class MessageActivity: BaseActivity() {
         enablePermissions.startCamera(this)
     }
 
-   /* private inline fun <reified T : Activity> Activity.navigate() {
-        val intent = Intent(this@MessageActivity, T::class.java)
-        startActivity(intent.apply {
-            putExtra("source", Constants.user.id)
-            putExtra("target", tv_name.text.toString())
-        })
-    }*/
+
+
+
+    /* private inline fun <reified T : Activity> Activity.navigate() {
+         val intent = Intent(this@MessageActivity, T::class.java)
+         startActivity(intent.apply {
+             putExtra("source", Constants.user.id)
+             putExtra("target", tv_name.text.toString())
+         })
+     }*/
 
 }

@@ -36,4 +36,5 @@ abstract class BaseActivity: AppCompatActivity() {
                     id.fragmentContainer, fragment()) }
 
     abstract fun fragment(): BaseFragment
+
 }

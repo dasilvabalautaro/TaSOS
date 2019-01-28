@@ -6,10 +6,12 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
+import android.util.DisplayMetrics
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.tools.Variables
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.windowManager
 import javax.inject.Inject
 import java.io.*
 import javax.inject.Singleton
@@ -18,8 +20,17 @@ import javax.inject.Singleton
 class ManageFiles @Inject constructor(private val context: Context) {
     private val directoryWork = "tasos"
     private val quality = 100
+    private val displayMetrics = DisplayMetrics()
+    private var screenWidth = 0
+    private var screenHeight = 0
     val fileNameML: String
         get() = "dataml.txt"
+
+    init {
+        context.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        this.screenWidth = displayMetrics.widthPixels
+        this.screenHeight = displayMetrics.heightPixels
+    }
 
     fun getAlbumStorageDir(): File {
         val file = File(Environment.getExternalStorageDirectory(), directoryWork)
@@ -64,17 +75,26 @@ class ManageFiles @Inject constructor(private val context: Context) {
             return stringBuilder.toString()
 
         } catch (e: FileNotFoundException) {
-            println("File not found: " + e.toString())
+            println("File not found: $e")
         } catch (e: IOException) {
-            println("Can not read file: " + e.toString())
+            println("Can not read file: $e")
         }
         return null
 
     }
 
     private fun scaleBitmapDown(bitmap: Bitmap): Bitmap {
-        if (Variables.screenWidth < bitmap.width){
-            val diffRelationSize = Variables.screenWidth.toFloat() / bitmap.width.toFloat()
+        return if (this.screenWidth < bitmap.width){
+            val diffRelationSize = this.screenWidth.toFloat() / bitmap.width.toFloat()
+            Bitmap.createScaledBitmap(bitmap,
+                    (bitmap.width * diffRelationSize).toInt(),
+                    (bitmap.height * diffRelationSize).toInt(), true)
+        }else{
+            bitmap
+        }
+
+        /*if (this.screenWidth < bitmap.width){
+            val diffRelationSize = this.screenWidth.toFloat() / bitmap.width.toFloat()
             val newWidth = (bitmap.width.toFloat() * diffRelationSize).toInt()
             val newHeight = (bitmap.height.toFloat() * diffRelationSize).toInt()
             val newBitmap = Bitmap.createBitmap(newWidth,
@@ -97,7 +117,7 @@ class ManageFiles @Inject constructor(private val context: Context) {
 
         }else{
             return bitmap
-        }
+        }*/
     }
 
     fun getBitmap(uri: Uri?): Bitmap? {
@@ -131,7 +151,5 @@ class ManageFiles @Inject constructor(private val context: Context) {
         return BitmapFactory.decodeByteArray(decode,
                 0, decode.size)
     }
-
-
 
 }

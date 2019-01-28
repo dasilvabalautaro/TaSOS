@@ -70,6 +70,7 @@ abstract class BaseFragment: Fragment() {
             is Failure.NetworkConnection -> renderFailure(R.string.failure_network_connection)
             is Failure.ServerError -> renderFailure(R.string.failure_server_error)
             is Failure.DatabaseError -> renderFailure(R.string.failure_database_error)
+            is Failure.AuthenticateError -> renderFailure(R.string.failure_authenticate)
         }
     }
 

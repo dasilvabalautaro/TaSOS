@@ -1,11 +1,17 @@
 package com.globalhiddenodds.tasos.presentation.view.fragments
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.StringRes
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import com.github.chrisbanes.photoview.PhotoView
+import com.globalhiddenodds.tasos.App
 import com.globalhiddenodds.tasos.R
 import com.globalhiddenodds.tasos.extension.observe
 import com.globalhiddenodds.tasos.extension.failure
@@ -15,6 +21,7 @@ import com.globalhiddenodds.tasos.models.persistent.network.FirebaseDbToRoom
 import com.globalhiddenodds.tasos.presentation.component.MessageAdapter
 import com.globalhiddenodds.tasos.presentation.data.GroupMessageView
 import com.globalhiddenodds.tasos.presentation.data.MessageView
+import com.globalhiddenodds.tasos.presentation.navigation.Navigator
 import com.globalhiddenodds.tasos.presentation.plataform.BaseFragment
 import com.globalhiddenodds.tasos.presentation.presenter.LiveDataMessageContactViewModel
 import com.globalhiddenodds.tasos.presentation.presenter.SendMessageViewModel
@@ -25,10 +32,13 @@ import com.globalhiddenodds.tasos.tools.Constants
 import com.globalhiddenodds.tasos.tools.EnablePermissions
 import com.globalhiddenodds.tasos.tools.Variables
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.progress.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_message.*
+import kotlinx.android.synthetic.main.view_row_message.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.layoutInflater
 
 import javax.inject.Inject
 
@@ -108,11 +118,13 @@ class MessageFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeView()
         if (firstTimeCreated(savedInstanceState)) {
+
         }
 
         ib_send.setOnClickListener { executeSend() }
         ib_image.setOnClickListener { (activity as MessageActivity).gallery() }
         ib_camera.setOnClickListener { (activity as MessageActivity).camera() }
+
         /*val imeManager = appComponent.context()
                 .getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imeManager.showInputMethodPicker()*/
@@ -152,8 +164,10 @@ class MessageFragment: BaseFragment() {
         rv_messages!!.layoutManager = LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false)
         rv_messages.adapter = messageAdapter
-        /*contactsAdapter.clickListener = { group, navigationExtras ->
-            navigator.showMessages(activity!!, group, navigationExtras) }*/
+        /*messageAdapter.clickListener = { group, navigationExtras ->
+            //navigator.showMessages(activity!!, group, navigationExtras)
+            zoomImage(group, navigationExtras)
+        }*/
     }
 
 
@@ -206,7 +220,28 @@ class MessageFragment: BaseFragment() {
 
     private fun resultMessages(list: List<MessageView>?){
 
-        if (!list.isNullOrEmpty()){
+        Handler().postDelayed({
+            if (list != null){
+                messageAdapter.collection = list.orEmpty()
+                if (rv_messages != null){
+                    rv_messages!!.refreshDrawableState()
+                }
+
+                if (!list.isEmpty()){
+                    val countMsg = list.size
+                    try {
+                        rv_messages!!.scrollToPosition(countMsg - 1)
+                    }catch (ex: KotlinNullPointerException){
+                        println("COUNT LIST: $countMsg")
+                    }
+
+                }
+
+            }
+
+        }, 500)
+
+       /* if (!list.isNullOrEmpty()){
 
             GlobalScope.launch {
                 messageAdapter.setObjectList(list as ArrayList<MessageView>)
@@ -235,7 +270,7 @@ class MessageFragment: BaseFragment() {
 
         }else{
             println("Size list recycler EMPTY")
-        }
+        }*/
 
     }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaSOS</string>
+    <string name="error_user_create">Error creación usuario</string>
+    <string name="error_user_not_found">Usuario no existe</string>
+    <string name="lbl_description_image">Imagen</string>
+    <string name="hint_email">Correo</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_message">Coloque mensaje</string>
+    <string name="lbl_sing_up">Regístrate</string>
+    <string name="lbl_sing_in">¿Sí tiene una cuenta?</string>
+    <string name="btn_sign_in">Ingresar</string>
+    <string name="action_refresh">Refrescar</string>
+    <string name="failure_network_connection">Error conexión de red</string>
+    <string name="failure_server_error">Error servidor</string>
+    <string name="failure_database_error">Error base de datos</string>
+    <string name="failure_input">Error datos entrada</string>
+    <string name="lbl_search">Buscar contacto</string>
+    <string name="lbl_video">Video Chat</string>
+    <string name="lbl_call">Llamar</string>
+    <string name="lbl_video_foreground">Video Chat, oprima boton cámara y responda</string>
+    <string name="lbl_audio_foreground">Audio Chat, oprima boton audio y responda</string>
+    <string name="msg_search_process">Búsqueda en proceso</string>
+    <string name="lbl_configuration">Configuración</string>
+    <string name="action_message">Mensaje enviado</string>
+    <string name="failure_authenticate">Error autentificación</string>
+    <string name="action_invitation">Quiere ser su amigo. Puede responder o no.</string>
+    <string name="update_profile_ok">Perfil actualizado</string>
+    <string name="update_profile_fail">Error en actualización</string>
+    <string name="foreground_message">¡Bienvenido a TaSOS!</string>
+    <string name="background_message">¡Hasta luego!</string>
+    <string name="send_message">Enviar</string>
+    <string name="destroy_message">¡Destruido!</string>
+    <string name="create_message">¡Creado!</string>
+    <string name="select_image">Seleccionar imagen</string>
+    <string name="new_message_notify">Nuevo mensaje</string>
+    <string name="channel_description">Nuevos mensajes TaSOS</string>
+    <string name="channel_name">Notificación TaSOS</string>
+    <string name="select_photo">Seleccione una imagen</string>
+    <string name="value_null">Nulo no puede ser transformado</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="default_notification_channel_id" translatable="false">com.globalhiddenodds.tasos.news</string>
+    <string name="lbl_delete_all_message">Borrar mensajes</string>
+    <string name="lbl_tools">Herramientas</string>
+</resources>

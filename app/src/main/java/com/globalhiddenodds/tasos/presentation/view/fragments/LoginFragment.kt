@@ -84,10 +84,11 @@ class LoginFragment: BaseFragment() {
 
     private fun resultSignIn(value: Boolean?){
         if (value != null && value){
-            when (repositoryNetwork.getCurrentUser(Constants.user)) {
+            navigator.showContact(activity!!)
+            /*when (repositoryNetwork.getCurrentUser(Constants.user)) {
                 true -> navigator.showContact(activity!!)
                 false -> context!!.toast(getString(R.string.failure_authenticate))
-            }
+            }*/
         }
 
     }
@@ -98,7 +99,7 @@ class LoginFragment: BaseFragment() {
             val splitEmail = Constants.user.email.split("@")
             val prefix = (1000..9000).shuffled().last()
             val nameUser = Validate.getName(splitEmail[0])
-            val id = nameUser + "-" + prefix.toString()
+            val id = "$nameUser-$prefix"
             Constants.user.id = id
             createUserDBViewModel.createUser()
         }

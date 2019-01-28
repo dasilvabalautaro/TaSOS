@@ -15,11 +15,11 @@ android {
         versionCode config["version_code"]
         versionName config["version_name"]
         testInstrumentationRunner config["test_runner"]
-        externalNativeBuild {
+        /*externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
             }
-        }
+        }*/
     }
 
     packagingOptions {
@@ -36,11 +36,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    externalNativeBuild {
+    /*externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
         }
-    }
+    }*/
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin/'
         main.java.srcDirs += [file("$buildDir/generated/source/kapt/main")]
@@ -87,6 +87,7 @@ dependencies {
     implementation applicationDependencies.anko
     implementation applicationDependencies.room
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation applicationDependencies.photoView
 
     //Unit/Integration tests dependencies
     testImplementation unitTestDependencies.kotlin

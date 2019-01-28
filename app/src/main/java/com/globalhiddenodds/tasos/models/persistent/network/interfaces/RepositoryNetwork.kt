@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Singleton
 
 
 interface RepositoryNetwork {
@@ -26,6 +27,7 @@ interface RepositoryNetwork {
     fun createUser(user: User): Either<Failure, Boolean>
     fun signInUser(user: User): Either<Failure, Boolean>
 
+    @Singleton
     class Network @Inject constructor(private val networkHandler:
                                              NetworkHandler,
                                       private val registerTokenFCM:
@@ -101,14 +103,21 @@ interface RepositoryNetwork {
         }
 
         private fun create(user: User): Either<Failure, Boolean>{
-
+            var result = true
             this.auth!!.createUserWithEmailAndPassword(user.email,
                     user.password).addOnCompleteListener { task: Task<AuthResult> ->
                 if (!task.isSuccessful) {
-                    Either.Left(Failure.ServerError())
+                    result = false
                 }
             }
-            return Either.Right(true)
+
+            Thread.sleep(1000)
+            return if (result){
+                Either.Right(true)
+            }else{
+                Either.Left(Failure.ServerError())
+            }
+
 
         }
 
@@ -123,14 +132,19 @@ interface RepositoryNetwork {
         }
 
         private fun signIn(user: User): Either<Failure, Boolean>{
-
             this.auth!!.signInWithEmailAndPassword(user.email,
                     user.password).addOnCompleteListener { task: Task<AuthResult> ->
 
-                if (!task.isSuccessful) {
-                    Either.Left(Failure.ServerError())
+                if (task.isSuccessful) {
+                    Constants.user.id = this.auth!!.currentUser!!.displayName!!
                 }
             }
+
+            Thread.sleep(1000)
+            if (Constants.user.id.isEmpty()){
+                return Either.Left(Failure.AuthenticateError())
+            }
+            GlobalScope.launch { registerTokenFCM.getTokenFCM() }
             return Either.Right(true)
 
         }

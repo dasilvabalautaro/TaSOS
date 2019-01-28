@@ -33,6 +33,7 @@ class Navigator @Inject constructor(private val repositoryNetwork: RepositoryNet
             true -> showContact(context)
             false -> showLogin(context)
         }
+
     }
 
     fun showMessages(activity: FragmentActivity,
